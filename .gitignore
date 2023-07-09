@@ -1,1 +1,3 @@
 jamming-app/apps/jamming-api/.env
+
+*.env

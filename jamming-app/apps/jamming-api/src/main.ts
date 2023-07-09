@@ -1,16 +1,10 @@
 import app from './server';
-import dotenv from 'dotenv';
+import config from './libs/utils/config';
 
-const dotenvConfig = dotenv.config({
-  path: __dirname + '/.env',
-});
-
-console.log(dotenvConfig);
-
-const PORT = process.env.PORT || 3000;
+const PORT = config.PORT;
 
 export const httpServer = app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}/ `);
+  console.log(`Server is running on ${config.EXPRESS_URL_DEV + config.PORT}/ `);
 });
 
 export default app;
