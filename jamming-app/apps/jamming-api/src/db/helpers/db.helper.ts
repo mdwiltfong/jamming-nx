@@ -13,19 +13,23 @@ class MongoDBHelper {
       },
     });
   }
-  public static async connect(): Promise<void> {
+  public static async connect(): Promise<MongoClient | void> {
     try {
       // Connect the client to the server	(optional starting in v4.7)
-      await this.client.connect();
+      const db = await this.client.connect();
       // Send a ping to confirm a successful connection
       await this.client.db('admin').command({ ping: 1 });
       console.log(
         'Pinged your deployment. You successfully connected to MongoDB!'
       );
+      return db;
     } finally {
       // Ensures that the this.client will close when you finish/error
       await this.client.close();
     }
+  }
+  public static getClient(): MongoClient {
+    return this.client;
   }
 }
 
