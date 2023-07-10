@@ -23,11 +23,41 @@ class MongoDBHelper {
         'Pinged your deployment. You successfully connected to MongoDB!'
       );
       return db;
-    } finally {
-      // Ensures that the this.client will close when you finish/error
-      await this.client.close();
+    } catch (error) {
+      console.log('There was an issue connecting to MongoDB');
+      console.log(error);
     }
   }
+
+  public static async disconnect(): Promise<MongoClient | void> {
+    try {
+      return await this.client.close();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  public static async loadCollection(
+    collectionName: string,
+    clusterName: string
+  ) {
+    try {
+      await this.connect();
+      //TODO: this line of code returns a truthy response whether there is a collection or not.
+      const collection = this.client.db(clusterName).collection(collectionName);
+      if (collection) {
+        const deleteResult = await collection.deleteMany({});
+        console.log('Deleted documents =>', deleteResult);
+      }
+      await this.disconnect();
+    } catch (error) {
+      console.log(
+        `There was an issue loading the \"${collectionName}\" collection`
+      );
+      console.log(error);
+      await this.disconnect();
+    }
+  }
+
   public static getClient(): MongoClient {
     return this.client;
   }

@@ -2,7 +2,9 @@
   "name": "@jamming-app/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "loadCollection:users": "node ./dist/apps/jamming-api/apps/jamming-api/src/db/helpers/loadUsersCollection.js"
+  },
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.11.1",

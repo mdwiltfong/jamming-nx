@@ -1,7 +1,8 @@
 import dotenv from 'dotenv';
+import path from 'path';
 
 const envFile = dotenv.config({
-  path: process.cwd() + '/.env',
+  path: path.resolve(process.cwd(), '.env'),
 });
 
 console.log(envFile);
