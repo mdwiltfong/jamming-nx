@@ -1,5 +1,7 @@
-import { MongoClient, ServerApiVersion } from 'mongodb';
+import { MongoBulkWriteError, MongoClient, ServerApiVersion } from 'mongodb';
 import config from '../../libs/utils/config';
+import { validationSchemas } from './collectionSchemas';
+import { mockUsers } from './mockData';
 
 class MongoDBHelper {
   private static connectionString: string = config.MONGODB_URI;
@@ -42,17 +44,38 @@ class MongoDBHelper {
   ) {
     try {
       await this.connect();
-      //TODO: this line of code returns a truthy response whether there is a collection or not.
-      const collection = this.client.db(clusterName).collection(collectionName);
-      if (collection) {
-        const deleteResult = await collection.deleteMany({});
-        console.log('Deleted documents =>', deleteResult);
+      const dbClient = this.client.db(clusterName);
+
+      const usrCollection = (await dbClient.listCollections().toArray()).filter(
+        (collection) => collection.name === collectionName
+      );
+      // If the collection exists, we drop it.
+      //It if doesn't exist, we don't drop it, and go straight to creating it
+      if (usrCollection.length > 0) {
+        const deleteResult = await dbClient.dropCollection(collectionName);
+        console.log('Dropped Collection =>', deleteResult);
       }
+      // Creating collection
+      const newUsrCollection = await dbClient.createCollection(
+        collectionName,
+        validationSchemas.userValidationSchema
+      );
+      console.log('Created Collection =>', newUsrCollection.namespace);
+      const insertionResult = await newUsrCollection.insertMany(mockUsers);
+      console.log(
+        'Inserted mock data into collection =>',
+        insertionResult.insertedCount
+      );
       await this.disconnect();
     } catch (error) {
       console.log(
         `There was an issue loading the \"${collectionName}\" collection`
       );
+      if (error instanceof MongoBulkWriteError) {
+        console.log(
+          error.writeErrors[0].err.errInfo.details.schemaRuleNotSatisfied
+        );
+      }
       console.log(error);
       await this.disconnect();
     }
