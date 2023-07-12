@@ -7,6 +7,7 @@ interface CustomCreateCollectionOptions extends CreateCollectionOptions {
       title: string;
       required: string[];
       properties: any;
+      additionalProperties: boolean;
     };
   };
 }
@@ -34,24 +35,8 @@ const userValidationSchema: CustomCreateCollectionOptions = {
           bsonType: 'string',
           description: 'must be a string and is required',
         },
-        playlists: {
-          bsonType: 'array',
-          description: 'must be an array and is required',
-          items: {
-            bsonType: 'object',
-            properties: {
-              title: {
-                bsonType: 'string',
-                description: 'must be a string and is optional',
-              },
-              description: {
-                bsonType: 'string',
-                description: 'must be a string and is optional',
-              },
-            },
-          },
-        },
       },
+      additionalProperties: false,
     },
   },
 };
