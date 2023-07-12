@@ -51,6 +51,7 @@ const playlistValidationSchema: CustomCreateCollectionOptions = {
       title: 'Playlist Object Validation',
       required: [
         '_id',
+        'userId',
         'name',
         'spotifyUserId',
         'spotifyPlayListId',
@@ -58,6 +59,9 @@ const playlistValidationSchema: CustomCreateCollectionOptions = {
       ],
       properties: {
         _id: {
+          bsonType: 'objectId',
+        },
+        userId: {
           bsonType: 'objectId',
         },
         name: {

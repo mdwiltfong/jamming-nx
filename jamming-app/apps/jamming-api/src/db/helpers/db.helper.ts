@@ -45,7 +45,8 @@ class MongoDBHelper {
   }
   public static async loadCollection(
     collectionName: string,
-    collectionSchema: CreateCollectionOptions
+    collectionSchema: CreateCollectionOptions,
+    mockData: any
   ) {
     try {
       await this.connect();
@@ -66,24 +67,23 @@ class MongoDBHelper {
         collectionSchema
       );
       console.log('Created Collection =>', newUsrCollection.namespace);
-      const insertionResult = await newUsrCollection.insertMany(
-        mockData.mockUsers
-      );
+      const insertionResult = await newUsrCollection.insertMany(mockData);
       console.log(
         'Inserted mock data into collection =>',
         insertionResult.insertedCount
       );
-      await this.disconnect();
     } catch (error) {
       console.log(
         `There was an issue loading the \"${collectionName}\" collection`
       );
       if (error instanceof MongoBulkWriteError) {
         console.log(
-          error.writeErrors[0].err.errInfo.details.schemaRuleNotSatisfied
+          error.writeErrors[0].WriteError.err.errInfo.details
+            .schemaRulesNotSatisfied
         );
       }
       console.log(error);
+    } finally {
       await this.disconnect();
     }
   }

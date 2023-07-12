@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "loadCollection:users": "node ./dist/apps/jamming-api/apps/jamming-api/src/db/helpers/loadUsersCollection.js"
+    "loadCollection:users": "node ./dist/apps/jamming-api/apps/jamming-api/src/db/helpers/loadUsersCollection.js",
+    "loadCollection:playlists": "node ./dist/apps/jamming-api/apps/jamming-api/src/db/helpers/loadPlayListsCollection.js"
   },
   "private": true,
   "dependencies": {
