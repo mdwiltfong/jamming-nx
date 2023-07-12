@@ -17,8 +17,11 @@ const userValidationSchema: CustomCreateCollectionOptions = {
     $jsonSchema: {
       bsonType: 'object',
       title: 'User Object Validation',
-      required: ['firstName', 'lastName', 'email', 'password', 'playlists'],
+      required: ['_id', 'firstName', 'lastName', 'email', 'password'],
       properties: {
+        _id: {
+          bsonType: 'objectId',
+        },
         firstName: {
           bsonType: 'string',
           description: 'must be a string and is required',
@@ -41,6 +44,45 @@ const userValidationSchema: CustomCreateCollectionOptions = {
   },
 };
 
+const playlistValidationSchema: CustomCreateCollectionOptions = {
+  validator: {
+    $jsonSchema: {
+      bsonType: 'object',
+      title: 'Playlist Object Validation',
+      required: [
+        '_id',
+        'name',
+        'spotifyUserId',
+        'spotifyPlayListId',
+        'imageUrl',
+      ],
+      properties: {
+        _id: {
+          bsonType: 'objectId',
+        },
+        name: {
+          bsonType: 'string',
+          description: 'must be a string and is required',
+        },
+        spotifyUserId: {
+          bsonType: 'string',
+          description: 'must be a string and is required',
+        },
+        spotifyPlayListId: {
+          bsonType: 'string',
+          description: 'must be a string and is required',
+        },
+        imageUrl: {
+          bsonType: 'string',
+          description: 'must be a string and is required',
+        },
+      },
+      additionalProperties: false,
+    },
+  },
+};
+
 export const validationSchemas = {
   userValidationSchema: userValidationSchema,
+  playlistValidationSchema: playlistValidationSchema,
 };

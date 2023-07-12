@@ -1,10 +1,15 @@
-import { MongoBulkWriteError, MongoClient, ServerApiVersion } from 'mongodb';
+import {
+  CreateCollectionOptions,
+  MongoBulkWriteError,
+  MongoClient,
+  ServerApiVersion,
+} from 'mongodb';
 import config from '../../libs/utils/config';
-import { validationSchemas } from './collectionSchemas';
-import { mockUsers } from './mockData';
+import { mockData } from './mockData';
 
 class MongoDBHelper {
   private static connectionString: string = config.MONGODB_URI;
+  private static cluster: string = 'cluster0';
   private static client: MongoClient = this.generateMongoClient();
   private static generateMongoClient(): MongoClient {
     return new MongoClient(this.connectionString, {
@@ -40,11 +45,11 @@ class MongoDBHelper {
   }
   public static async loadCollection(
     collectionName: string,
-    clusterName: string
+    collectionSchema: CreateCollectionOptions
   ) {
     try {
       await this.connect();
-      const dbClient = this.client.db(clusterName);
+      const dbClient = this.client.db(this.cluster);
 
       const usrCollection = (await dbClient.listCollections().toArray()).filter(
         (collection) => collection.name === collectionName
@@ -58,10 +63,12 @@ class MongoDBHelper {
       // Creating collection
       const newUsrCollection = await dbClient.createCollection(
         collectionName,
-        validationSchemas.userValidationSchema
+        collectionSchema
       );
       console.log('Created Collection =>', newUsrCollection.namespace);
-      const insertionResult = await newUsrCollection.insertMany(mockUsers);
+      const insertionResult = await newUsrCollection.insertMany(
+        mockData.mockUsers
+      );
       console.log(
         'Inserted mock data into collection =>',
         insertionResult.insertedCount

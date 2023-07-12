@@ -1,5 +1,5 @@
 // Mockusers with "password" as their password
-export const mockUsers = [
+const mockUsers = [
   {
     firstName: 'Alice',
     lastName: 'Smith',
@@ -31,3 +31,9 @@ export const mockUsers = [
     password: 'U2FsdGVkX19nR6kAxLmriGbdDMIS/RF3NyrQyD5NwA4=',
   },
 ];
+const mockPlaylists = [{}];
+
+export const mockData = {
+  mockUsers,
+  mockPlaylists,
+};
