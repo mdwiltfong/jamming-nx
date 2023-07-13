@@ -7,13 +7,7 @@ export const httpServer = app.listen(PORT, () => {
   console.log(`Server is running on ${config.EXPRESS_URL_DEV + config.PORT}/ `);
 });
 
-db.connect()
-  .then(() => {
-    console.log('Connected to MongoDB');
-  })
-  .catch((err) => {
-    console.error('====Error connecting to MongoDB====');
-    console.error(err);
-  });
-
+db.connect().then(() => {
+  console.log('Connected to MongoDB');
+});
 export default app;

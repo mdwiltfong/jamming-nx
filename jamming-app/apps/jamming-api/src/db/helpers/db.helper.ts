@@ -2,11 +2,12 @@ import {
   CreateCollectionOptions,
   MongoBulkWriteError,
   MongoClient,
+  MongoNetworkError,
+  MongoServerError,
   ServerApiVersion,
 } from 'mongodb';
 import config from '../../libs/utils/config';
-import { mockData } from './mockData';
-
+import color from 'colors';
 class MongoDBHelper {
   private static connectionString: string = config.MONGODB_URI;
   private static cluster: string = 'cluster0';
@@ -27,12 +28,18 @@ class MongoDBHelper {
       // Send a ping to confirm a successful connection
       await this.client.db('admin').command({ ping: 1 });
       console.log(
-        'Pinged your deployment. You successfully connected to MongoDB!'
+        color.green(
+          'Pinged your deployment. You successfully connected to MongoDB!'
+        )
       );
       return db;
-    } catch (error) {
-      console.log('There was an issue connecting to MongoDB');
-      console.log(error);
+    } catch (error: any) {
+      console.log(
+        color.underline.red('There was an issue connecting to MongoDB'.red)
+      );
+      if (error instanceof MongoNetworkError) {
+        console.error(color.red(error.errmsg.red));
+      }
     }
   }
 
@@ -76,7 +83,7 @@ class MongoDBHelper {
       console.log(
         `There was an issue loading the \"${collectionName}\" collection`
       );
-      if (error instanceof MongoBulkWriteError) {
+      if (error) {
         console.log(error.writeErrors[0]);
       }
       console.log(error);
