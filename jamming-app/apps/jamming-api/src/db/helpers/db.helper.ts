@@ -77,10 +77,7 @@ class MongoDBHelper {
         `There was an issue loading the \"${collectionName}\" collection`
       );
       if (error instanceof MongoBulkWriteError) {
-        console.log(
-          error.writeErrors[0].WriteError.err.errInfo.details
-            .schemaRulesNotSatisfied
-        );
+        console.log(error.writeErrors[0]);
       }
       console.log(error);
     } finally {
