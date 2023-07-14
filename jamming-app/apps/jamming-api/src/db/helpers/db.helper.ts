@@ -1,10 +1,13 @@
 import {
+  Condition,
   CreateCollectionOptions,
   MongoBulkWriteError,
   MongoClient,
   MongoNetworkError,
   MongoServerError,
+  ObjectId,
   ServerApiVersion,
+  WithId,
 } from 'mongodb';
 import config from '../../libs/utils/config';
 import color from 'colors';
@@ -96,7 +99,17 @@ class MongoDBHelper {
       await this.disconnect();
     }
   }
-
+  public static async getUser(
+    userId: Condition<ObjectId>
+  ): Promise<WithId<Document> | null> {
+    try {
+      const userCollection = await this.client
+        .db('cluster0')
+        .collection('users');
+      const user = await userCollection.findOne(userId);
+      return user;
+    } catch (error) {}
+  }
   public static getClient(): MongoClient {
     return this.client;
   }
