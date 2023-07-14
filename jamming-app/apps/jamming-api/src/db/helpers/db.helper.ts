@@ -13,18 +13,21 @@ class MongoDBHelper {
   private static cluster: string = 'cluster0';
   private static client: MongoClient = this.generateMongoClient();
   private static generateMongoClient(): MongoClient {
-    return new MongoClient(this.connectionString, {
+    const db = new MongoClient(this.connectionString, {
       serverApi: {
         version: ServerApiVersion.v1,
         strict: true,
         deprecationErrors: true,
       },
     });
+
+    return db;
   }
   public static async connect(): Promise<MongoClient | void> {
     try {
       // Connect the client to the server	(optional starting in v4.7)
       const db = await this.client.connect();
+      db;
       // Send a ping to confirm a successful connection
       await this.client.db('admin').command({ ping: 1 });
       console.log(
@@ -38,7 +41,7 @@ class MongoDBHelper {
         color.underline.red('There was an issue connecting to MongoDB'.red)
       );
       if (error instanceof MongoNetworkError) {
-        console.error(color.red(error.errmsg.red));
+        console.error(formatErrorMsg(error.errmsg));
       }
     }
   }
@@ -47,7 +50,9 @@ class MongoDBHelper {
     try {
       return await this.client.close();
     } catch (error) {
-      console.log(error);
+      if (error instanceof MongoServerError) {
+        console.error(formatErrorMsg(error.errmsg));
+      }
     }
   }
   public static async loadCollection(
@@ -79,14 +84,14 @@ class MongoDBHelper {
         'Inserted mock data into collection =>',
         insertionResult.insertedCount
       );
+      insertionResult.insertedIds;
     } catch (error) {
       console.log(
         `There was an issue loading the \"${collectionName}\" collection`
       );
-      if (error) {
-        console.log(error.writeErrors[0]);
+      if (error instanceof MongoBulkWriteError) {
+        console.error(formatErrorMsg(error.errmsg));
       }
-      console.log(error);
     } finally {
       await this.disconnect();
     }
@@ -95,6 +100,10 @@ class MongoDBHelper {
   public static getClient(): MongoClient {
     return this.client;
   }
+}
+
+function formatErrorMsg(error: any) {
+  return color.underline.red(error);
 }
 
 export default MongoDBHelper;
