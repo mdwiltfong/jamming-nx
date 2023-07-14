@@ -1,4 +1,4 @@
-import { MongoClient } from 'mongodb';
+import { MongoClient, ObjectId } from 'mongodb';
 import MongoDBHelper from '../db.helper';
 import color from 'colors';
 import { validationSchemas } from '../collectionSchemas';
@@ -20,7 +20,7 @@ describe(color.cyan('MongoDBHelper connectivity tests'), () => {
   });
 });
 
-describe(color.cyan('MongoDBHelp load collection'), () => {
+describe(color.cyan('MongoDBHelper can  load collection'), () => {
   test('Helper Function can load User collection', async () => {
     try {
       await MongoDBHelper.loadCollection(
@@ -41,6 +41,15 @@ describe(color.cyan('MongoDBHelp load collection'), () => {
       );
     } catch (error) {
       console.log(error);
+    }
+  });
+  test(color.cyan('Helper can retrieve a single user'), async () => {
+    try {
+      const user = await MongoDBHelper.findUserById(new ObjectId(1));
+      console.log(user);
+      expect(user).toBeDefined();
+    } catch (error) {
+      console.error(error);
     }
   });
 });

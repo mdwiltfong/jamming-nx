@@ -11,6 +11,7 @@ import {
 } from 'mongodb';
 import config from '../../libs/utils/config';
 import color from 'colors';
+import { User } from './models/User';
 class MongoDBHelper {
   private static connectionString: string = config.MONGODB_URI;
   private static cluster: string = 'cluster0';
@@ -99,16 +100,18 @@ class MongoDBHelper {
       await this.disconnect();
     }
   }
-  public static async getUser(
+  public static async findUserById(
     userId: Condition<ObjectId>
-  ): Promise<WithId<Document> | null> {
+  ): Promise<User | null> {
     try {
       const userCollection = await this.client
         .db('cluster0')
         .collection('users');
       const user = await userCollection.findOne(userId);
-      return user;
-    } catch (error) {}
+      return user as User;
+    } catch (error) {
+      console.error(formatErrorMsg(error.errmsg));
+    }
   }
   public static getClient(): MongoClient {
     return this.client;
