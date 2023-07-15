@@ -21,5 +21,6 @@ export default class MongoDBErrorHandler extends Error {
     console.log(colors.red(error.errmsg));
     console.log(colors.red('Possble Causes:'));
     console.log(error.cause);
+    Error.captureStackTrace(this, this.constructor);
   }
 }
