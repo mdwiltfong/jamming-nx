@@ -3,6 +3,7 @@ import MongoDBHelper from '../db.helper';
 import color from 'colors';
 import { validationSchemas } from '../collectionSchemas';
 import { mockData } from '../mockData';
+import config from '../../../libs/utils/config';
 describe(color.cyan('MongoDBHelper connectivity tests'), () => {
   test('Function can connect to DB instance', async () => {
     const db = await MongoDBHelper.connect();

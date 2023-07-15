@@ -1,17 +1,14 @@
 import {
   Condition,
   CreateCollectionOptions,
-  MongoBulkWriteError,
   MongoClient,
-  MongoNetworkError,
-  MongoServerError,
   ObjectId,
   ServerApiVersion,
-  WithId,
 } from 'mongodb';
 import config from '../../libs/utils/config';
 import color from 'colors';
 import { User } from './models/User';
+import MongoDBErrorHandler from '../errorHandlers/MongoDBErrorHandler';
 class MongoDBHelper {
   private static connectionString: string = config.MONGODB_URI;
   private static cluster: string = 'cluster0';
@@ -44,9 +41,7 @@ class MongoDBHelper {
       console.log(
         color.underline.red('There was an issue connecting to MongoDB'.red)
       );
-      if (error instanceof MongoNetworkError) {
-        console.error(formatErrorMsg(error.errmsg));
-      }
+      throw new MongoDBErrorHandler(error);
     }
   }
 
@@ -54,9 +49,7 @@ class MongoDBHelper {
     try {
       return await this.client.close();
     } catch (error) {
-      if (error instanceof MongoServerError) {
-        console.error(formatErrorMsg(error.errmsg));
-      }
+      throw new MongoDBErrorHandler(error);
     }
   }
   public static async loadCollection(
@@ -93,9 +86,7 @@ class MongoDBHelper {
       console.log(
         `There was an issue loading the \"${collectionName}\" collection`
       );
-      if (error instanceof MongoBulkWriteError) {
-        console.error(formatErrorMsg(error.errmsg));
-      }
+      throw new MongoDBErrorHandler(error);
     } finally {
       await this.disconnect();
     }
@@ -105,22 +96,18 @@ class MongoDBHelper {
   ): Promise<User | null> {
     try {
       await this.connect();
-      const userCollection = await this.client
-        .db('cluster0')
-        .collection('users');
+      const userCollection = this.client.db('cluster0').collection('users');
       const user = await userCollection.findOne(userId);
       return user as User;
     } catch (error) {
-      console.error(formatErrorMsg(error.errmsg));
+      throw new MongoDBErrorHandler(error);
+    } finally {
+      this.disconnect();
     }
   }
   public static getClient(): MongoClient {
     return this.client;
   }
-}
-
-function formatErrorMsg(error: any) {
-  return color.underline.red(error);
 }
 
 export default MongoDBHelper;
