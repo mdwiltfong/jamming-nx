@@ -100,10 +100,11 @@ class MongoDBHelper {
       await this.disconnect();
     }
   }
-  public static async findUserById(
+  public static async findUser(
     userId: Condition<ObjectId>
   ): Promise<User | null> {
     try {
+      await this.connect();
       const userCollection = await this.client
         .db('cluster0')
         .collection('users');

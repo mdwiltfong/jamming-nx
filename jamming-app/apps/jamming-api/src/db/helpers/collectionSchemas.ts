@@ -20,7 +20,7 @@ const userValidationSchema: CustomCreateCollectionOptions = {
       required: ['_id', 'firstName', 'lastName', 'email', 'password'],
       properties: {
         _id: {
-          bsonType: 'number',
+          bsonType: 'objectId',
         },
         firstName: {
           bsonType: 'string',
@@ -59,10 +59,10 @@ const playlistValidationSchema: CustomCreateCollectionOptions = {
       ],
       properties: {
         _id: {
-          bsonType: 'number',
+          bsonType: 'objectId',
         },
         userId: {
-          bsonType: 'number',
+          bsonType: 'objectId',
         },
         name: {
           bsonType: 'string',
