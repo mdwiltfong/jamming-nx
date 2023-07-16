@@ -1,13 +1,17 @@
 import {
+  Collection,
+  CollectionInfo,
   Condition,
   CreateCollectionOptions,
+  Filter,
   MongoClient,
   ObjectId,
   ServerApiVersion,
+  WithId,
 } from 'mongodb';
 import config from '../../libs/utils/config';
 import color from 'colors';
-import { User } from './models/User';
+import { Playlist, User } from './models/User';
 import MongoDBErrorHandler from '../errorHandlers/MongoDBErrorHandler';
 class MongoDBHelper {
   private static connectionString: string = config.MONGODB_URI;
@@ -122,8 +126,85 @@ class MongoDBHelper {
       await this.disconnect();
     }
   }
+
   public static getClient(): MongoClient {
     return this.client;
+  }
+}
+
+export class Model<T extends User | Playlist> {
+  private dbClient: MongoClient = MongoDBHelper.getClient();
+  private model: string;
+  constructor(model: string) {
+    this.model = model;
+  }
+
+  public async findDocument(
+    query: Filter<T>,
+    collectionName: CollectionInfo
+  ): Promise<WithId<T> | Error> {
+    try {
+      await this.dbClient.connect();
+      const collection = (await this.findCollection(
+        collectionName
+      )) as Collection<T>;
+      const user = await collection.findOne(query);
+      if (user === null) {
+        throw new Error('No user found');
+      }
+      return user;
+    } catch (error) {
+      throw new MongoDBErrorHandler(error);
+    } finally {
+      await this.dbClient.close();
+    }
+  }
+  public async findDocuments(
+    query: Filter<T>,
+    collectionName: CollectionInfo
+  ): Promise<WithId<T>[] | Error> {
+    try {
+      await this.dbClient.connect();
+      const collection = (await this.findCollection(
+        collectionName
+      )) as Collection<T>;
+      const documents = await collection.find(query).toArray();
+      if (documents.length === 0) {
+        throw new Error('No users found');
+      }
+      return documents;
+    } catch (error) {
+      throw new MongoDBErrorHandler(error);
+    } finally {
+      await this.dbClient.close();
+    }
+  }
+
+  private async findCollection(
+    collectionName: CollectionInfo
+  ): Promise<Collection<T> | Error> {
+    try {
+      const collections = await this.dbClient
+        .db('cluster0')
+        .listCollections()
+        .toArray();
+
+      if (
+        collections.filter(
+          (collection) => collection.name === collectionName.name
+        ).length == 0
+      ) {
+        throw new Error('Collection not found');
+      }
+      const collection: Collection<T> = this.dbClient
+        .db('cluster0')
+        .collection(collectionName.name);
+
+      return collection;
+    } catch (error) {
+      throw new MongoDBErrorHandler(error);
+    } finally {
+    }
   }
 }
 

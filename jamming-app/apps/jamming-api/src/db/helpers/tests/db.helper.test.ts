@@ -1,9 +1,9 @@
-import { ObjectId } from 'mongodb';
-import MongoDBHelper from '../db.helper';
+import { ObjectId, WithId } from 'mongodb';
+import MongoDBHelper, { Model } from '../db.helper';
 import color from 'colors';
 import { validationSchemas } from '../collectionSchemas';
 import { mockData } from '../mockData';
-import { User } from '../models/User';
+import { Playlist, User } from '../models/User';
 describe(color.cyan('MongoDBHelper connectivity tests'), () => {
   test('Function can connect to DB instance', async () => {
     const db = await MongoDBHelper.connect();
@@ -28,8 +28,18 @@ describe(color.cyan('MongoDBHelper can  load collection'), () => {
       mockData.mockPlaylists
     );
   });
-  test('Helper can retrieve a single user', async () => {
-    const user = await MongoDBHelper.findUser({ firstName: 'Emily' });
+});
+
+describe(color.cyan('Model generic tests'), () => {
+  test('Can find user document', async () => {
+    const userModel = new Model<User>('user');
+    const user = (await userModel.findDocument(
+      { firstName: 'Alice' },
+      {
+        name: 'users',
+      }
+    )) as User;
+
     expect(user).toMatchObject({
       _id: expect.any(ObjectId),
       firstName: expect.any(String),
@@ -38,8 +48,23 @@ describe(color.cyan('MongoDBHelper can  load collection'), () => {
       password: expect.any(String),
     });
   });
-  test('Helper can retrieve an array of users', async () => {
-    const users = (await MongoDBHelper.findUsers()) as User[];
-    expect(users.length).toBeGreaterThan(0);
+  test('Can find playlist document', async () => {
+    const playListModel = new Model<Playlist>('playlist');
+    const playlist = await playListModel.findDocument(
+      {
+        name: 'Playlist 5',
+      },
+      {
+        name: 'playlists',
+      }
+    );
+    expect(playlist).toMatchObject({
+      _id: expect.any(ObjectId),
+      userId: expect.any(ObjectId),
+      name: expect.any(String),
+      spotifyPlayListId: expect.any(String),
+      spotifyUserId: expect.any(String),
+      imageUrl: expect.any(String),
+    });
   });
 });
