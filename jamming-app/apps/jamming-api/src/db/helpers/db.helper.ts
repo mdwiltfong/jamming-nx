@@ -26,7 +26,6 @@ class MongoDBHelper {
   }
   public static async connect(): Promise<MongoClient | void> {
     try {
-      // Connect the client to the server	(optional starting in v4.7)
       const db = await this.client.connect();
       db;
       // Send a ping to confirm a successful connection
@@ -102,7 +101,22 @@ class MongoDBHelper {
     } catch (error) {
       throw new MongoDBErrorHandler(error);
     } finally {
-      this.disconnect();
+      await this.disconnect();
+    }
+  }
+  public static async findUsers(): Promise<User[] | Error> {
+    try {
+      await this.connect();
+      const userCollection = this.client.db('cluster0').collection('users');
+      const users: User[] = (await userCollection.find().toArray()) as User[];
+      if (users.length === 0) {
+        throw new Error('No users found');
+      }
+      return users;
+    } catch (error) {
+      throw new MongoDBErrorHandler(error);
+    } finally {
+      await this.disconnect();
     }
   }
   public static getClient(): MongoClient {

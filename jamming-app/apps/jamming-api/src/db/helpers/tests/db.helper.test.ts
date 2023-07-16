@@ -4,6 +4,7 @@ import color from 'colors';
 import { validationSchemas } from '../collectionSchemas';
 import { mockData } from '../mockData';
 import config from '../../../libs/utils/config';
+import { User } from '../models/User';
 describe(color.cyan('MongoDBHelper connectivity tests'), () => {
   test('Function can connect to DB instance', async () => {
     const db = await MongoDBHelper.connect();
@@ -37,5 +38,9 @@ describe(color.cyan('MongoDBHelper can  load collection'), () => {
       email: expect.any(String),
       password: expect.any(String),
     });
+  });
+  test('Helper can retrieve an array of users', async () => {
+    const users = (await MongoDBHelper.findUsers()) as User[];
+    expect(users.length).toBeGreaterThan(0);
   });
 });
