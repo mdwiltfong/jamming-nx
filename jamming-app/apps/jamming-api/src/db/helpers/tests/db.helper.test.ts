@@ -33,12 +33,12 @@ describe(color.cyan('MongoDBHelper can  load collection'), () => {
 describe(color.cyan('Model generic tests'), () => {
   test('Can find user document', async () => {
     const userModel = new Model<User>('user');
-    const user = (await userModel.findDocument(
+    const user = await userModel.findDocument(
       { firstName: 'Alice' },
       {
         name: 'users',
       }
-    )) as User;
+    );
 
     expect(user).toMatchObject({
       _id: expect.any(ObjectId),

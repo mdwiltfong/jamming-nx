@@ -142,37 +142,17 @@ export class Model<T extends User | Playlist> {
   public async findDocument(
     query: Filter<T>,
     collectionName: CollectionInfo
-  ): Promise<WithId<T> | Error> {
+  ): Promise<T> {
     try {
       await this.dbClient.connect();
       const collection = (await this.findCollection(
         collectionName
       )) as Collection<T>;
-      const user = await collection.findOne(query);
-      if (user === null) {
+      const document = await collection.findOne(query);
+      if (document === null) {
         throw new Error('No user found');
       }
-      return user;
-    } catch (error) {
-      throw new MongoDBErrorHandler(error);
-    } finally {
-      await this.dbClient.close();
-    }
-  }
-  public async findDocuments(
-    query: Filter<T>,
-    collectionName: CollectionInfo
-  ): Promise<WithId<T>[] | Error> {
-    try {
-      await this.dbClient.connect();
-      const collection = (await this.findCollection(
-        collectionName
-      )) as Collection<T>;
-      const documents = await collection.find(query).toArray();
-      if (documents.length === 0) {
-        throw new Error('No users found');
-      }
-      return documents;
+      return document as T;
     } catch (error) {
       throw new MongoDBErrorHandler(error);
     } finally {
@@ -182,7 +162,7 @@ export class Model<T extends User | Playlist> {
 
   private async findCollection(
     collectionName: CollectionInfo
-  ): Promise<Collection<T> | Error> {
+  ): Promise<Collection<T>> {
     try {
       const collections = await this.dbClient
         .db('cluster0')

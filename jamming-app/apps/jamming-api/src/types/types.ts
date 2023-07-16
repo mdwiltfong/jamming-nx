@@ -1,3 +1,5 @@
+import { WithId } from 'mongodb';
+
 export interface axiosOptions {
   method: 'GET' | 'PUT' | 'DELETE' | 'POST';
   url: string;
