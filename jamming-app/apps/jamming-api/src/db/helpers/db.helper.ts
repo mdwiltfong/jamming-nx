@@ -96,8 +96,11 @@ class MongoDBHelper {
     try {
       await this.connect();
       const userCollection = this.client.db('cluster0').collection('users');
-      const user = await userCollection.findOne(userId);
-      return user as User;
+      const user: User = (await userCollection.findOne(userId)) as User;
+      if (user === null) {
+        throw new Error('No user found');
+      }
+      return user;
     } catch (error) {
       throw new MongoDBErrorHandler(error);
     } finally {
