@@ -176,6 +176,7 @@ export class Model<T extends User | Playlist> {
       ) {
         throw new Error('Collection not found');
       }
+
       const collection: Collection<T> = this.dbClient
         .db('cluster0')
         .collection(collectionName.name);
@@ -184,6 +185,24 @@ export class Model<T extends User | Playlist> {
     } catch (error) {
       throw new MongoDBErrorHandler(error);
     } finally {
+    }
+  }
+
+  public async deleteDocument(
+    query: Filter<T>,
+    collectName: CollectionInfo
+  ): Promise<User> {
+    try {
+      await this.dbClient.connect();
+      const collection = await this.findCollection(collectName);
+      const document = await collection.findOneAndDelete(query);
+      if (document === null) {
+        throw new Error('No user found');
+      }
+      return document.value as User;
+    } catch (error) {
+    } finally {
+      await this.dbClient.close();
     }
   }
 }
