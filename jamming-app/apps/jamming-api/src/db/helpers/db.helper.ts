@@ -199,6 +199,7 @@ export class Model<T extends User | Playlist> {
       if (document === null) {
         throw new Error('No user found');
       }
+      console.log(document);
       return document.value as User;
     } catch (error) {
     } finally {

@@ -31,6 +31,18 @@ describe(color.cyan('MongoDBHelper can  load collection'), () => {
 });
 
 describe(color.cyan('Model generic tests'), () => {
+  beforeAll(async () => {
+    await MongoDBHelper.loadCollection(
+      'users',
+      validationSchemas.userValidationSchema,
+      mockData.mockUsers
+    );
+    await MongoDBHelper.loadCollection(
+      'playlists',
+      validationSchemas.playlistValidationSchema,
+      mockData.mockPlaylists
+    );
+  });
   test('Can find user document', async () => {
     const userModel = new Model<User>('user');
     const user = await userModel.findDocument(
@@ -59,6 +71,45 @@ describe(color.cyan('Model generic tests'), () => {
       }
     );
     expect(playlist).toMatchObject({
+      _id: expect.any(ObjectId),
+      userId: expect.any(ObjectId),
+      name: expect.any(String),
+      spotifyPlayListId: expect.any(String),
+      spotifyUserId: expect.any(String),
+      imageUrl: expect.any(String),
+    });
+  });
+  test('Can delete user document', async () => {
+    const userModel = new Model<User>('user');
+
+    const deletedUser = await userModel.deleteDocument(
+      { firstName: 'Alice' },
+      { name: 'users' }
+    );
+    expect(deletedUser).toMatchObject({
+      _id: expect.any(ObjectId),
+      firstName: expect.any(String),
+      lastName: expect.any(String),
+      email: expect.any(String),
+      password: expect.any(String),
+    });
+  });
+  test("Returns null if user document isn't deleted", async () => {
+    const userModel = new Model<User>('user');
+    const deletedUser = await userModel.deleteDocument(
+      { firstName: 'Alice' },
+      { name: 'users' }
+    );
+    expect(deletedUser).toBeNull();
+  });
+  test('Can delete playlist document', async () => {
+    const playlistmodel = new Model<Playlist>('user');
+
+    const deletedPlayList = await playlistmodel.deleteDocument(
+      { name: 'Playlist 1' },
+      { name: 'playlists' }
+    );
+    expect(deletedPlayList).toMatchObject({
       _id: expect.any(ObjectId),
       userId: expect.any(ObjectId),
       name: expect.any(String),
