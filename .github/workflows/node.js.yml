@@ -34,3 +34,4 @@ jobs:
       working-directory: ./jamming-app
     - run: npm run build --if-present
     - run: nx test jamming-api
+      working-directory: ./jamming-app
