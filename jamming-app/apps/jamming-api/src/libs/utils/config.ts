@@ -1,8 +1,11 @@
 import dotenv from 'dotenv';
+import path from 'path';
 
-dotenv.config({
-  path: process.cwd() + '/.env',
+const envFile = dotenv.config({
+  path: path.resolve(process.cwd(), '.env'),
 });
+
+console.log(envFile);
 
 interface ENV {
   NODE_ENV: string | undefined;
@@ -10,6 +13,7 @@ interface ENV {
   EXPRESS_URL_DEV: string | undefined;
   SPOTIFY_ACCOUNTS_URL: string;
   SPOTIFY_API_URL: string;
+  MONGODB_URI: string;
 }
 
 interface Config extends ENV {}
@@ -21,13 +25,14 @@ const getConfig = (): ENV => {
     EXPRESS_URL_DEV: process.env.EXPRESS_URL_DEV,
     SPOTIFY_ACCOUNTS_URL: process.env.SPOTIFY_ACCOUNTS_URL,
     SPOTIFY_API_URL: process.env.SPOTIFY_API_URL,
+    MONGODB_URI: process.env.MONGODB_URI,
   };
 };
 
 const getSanitzedConfig = (config: ENV): Config => {
   for (const [key, value] of Object.entries(config)) {
     if (value === undefined) {
-      throw new Error(`Missing key ${key} in config.env`);
+      throw new Error(`Missing value for ${key} in config.env`);
     }
   }
   return config as Config;

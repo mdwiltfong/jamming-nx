@@ -2,7 +2,10 @@
   "name": "@jamming-app/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "loadCollection:users": "node ./dist/apps/jamming-api/apps/jamming-api/src/db/helpers/loadUsersCollection.js",
+    "loadCollection:playlists": "node ./dist/apps/jamming-api/apps/jamming-api/src/db/helpers/loadPlayListsCollection.js"
+  },
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -12,9 +15,11 @@
     "@mui/styled-engine-sc": "^5.12.0",
     "@swc/helpers": "~0.5.0",
     "axios": "^1.0.0",
+    "colors": "^1.4.0",
     "dotenv": "^16.3.1",
     "express": "~4.18.1",
     "formik": "^2.4.2",
+    "mongodb": "^5.7.0",
     "nodemon": "^3.0.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",

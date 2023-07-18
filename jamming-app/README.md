@@ -8,6 +8,8 @@
 
 In order to start the app, you will need to configure the process variables for the api in the root. There is a `.env.example` that shows the expected keys for the process variables.
 
+To start the server, change directory to `jamming-app`. Then run `nx serve jamming-api`. This will transpile code as well. So its suggested to start the server while developing as well.
+
 ## Generate code
 
 If you happen to use Nx plugins, you can leverage code generators that might come with it.
