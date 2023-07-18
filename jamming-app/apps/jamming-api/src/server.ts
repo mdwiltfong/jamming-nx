@@ -11,9 +11,10 @@ app.get('/status', (req: Request, res: Response) => {
   res.status(200).json({ message: 'Hello World' });
 });
 
-app.get('/users/:id', async (req: Request, res: Response) => {
+app.get('/users', async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
+    const { body } = req;
+    const { id } = body;
     const user = await userModel.findDocument(
       {
         _id: new ObjectId(id),
