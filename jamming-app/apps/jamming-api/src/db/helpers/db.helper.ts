@@ -184,7 +184,6 @@ export class Model<T extends User | Playlist> {
       return collection;
     } catch (error) {
       throw new MongoDBErrorHandler(error);
-    } finally {
     }
   }
 
