@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 import { IPlaylist, IUser } from '../db/helpers/models/User';
 
-const userSchema: yup.ObjectSchema<IUser<String>> = yup.object({
+export const userSchema: yup.ObjectSchema<IUser<String>> = yup.object({
   _id: yup.string(),
   firstName: yup.string().required(),
   lastName: yup.string().required(),
@@ -9,7 +9,7 @@ const userSchema: yup.ObjectSchema<IUser<String>> = yup.object({
   password: yup.string().required(),
 });
 
-const playlistSchema: yup.ObjectSchema<IPlaylist<String>> = yup.object({
+export const playlistSchema: yup.ObjectSchema<IPlaylist<String>> = yup.object({
   _id: yup.string(),
   userId: yup.string().required(),
   name: yup.string().required(),
