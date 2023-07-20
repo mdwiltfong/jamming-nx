@@ -150,11 +150,9 @@ export class Model<T extends User | Playlist> {
       )) as Collection<T>;
       const document = await collection.findOne(query);
       if (document === null) {
-        throw new Error('No user found');
+        throw new MongoDBErrorHandler('No User Found');
       }
       return document as T;
-    } catch (error) {
-      throw new MongoDBErrorHandler(error);
     } finally {
       await this.dbClient.close();
     }

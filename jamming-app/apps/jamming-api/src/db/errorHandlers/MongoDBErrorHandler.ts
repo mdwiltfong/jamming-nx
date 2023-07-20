@@ -8,19 +8,8 @@ import {
 } from 'mongodb';
 
 export default class MongoDBErrorHandler extends Error {
-  constructor(
-    private error:
-      | MongoNetworkError
-      | MongoParseError
-      | MongoServerSelectionError
-      | MongoNetworkTimeoutError
-      | MongoServerError
-  ) {
-    super(error.message);
-    console.log(colors.underline.red(error.name));
-    console.log(colors.red(error.errmsg));
-    console.log(colors.red('Possble Causes:'));
-    console.log(error.cause);
+  constructor(message: string) {
+    super(message);
     Error.captureStackTrace(this, this.constructor);
   }
 }
