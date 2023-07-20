@@ -1,7 +1,7 @@
 import * as yup from 'yup';
-import { IPlaylist, IUser } from '../db/helpers/models/User';
+import { IUser } from '../db/helpers/models/User';
 
-export const userSchema: yup.ObjectSchema<IUser<String>> = yup.object({
+export const userPayloadSchema: yup.ObjectSchema<IUser<String>> = yup.object({
   _id: yup.string(),
   firstName: yup.string().required(),
   lastName: yup.string().required(),
@@ -9,11 +9,12 @@ export const userSchema: yup.ObjectSchema<IUser<String>> = yup.object({
   password: yup.string().required(),
 });
 
-export const playlistSchema: yup.ObjectSchema<IPlaylist<String>> = yup.object({
-  _id: yup.string(),
-  userId: yup.string().required(),
-  name: yup.string().required(),
-  spotifyUserId: yup.string().required(),
-  spotifyPlaylistId: yup.string().required(),
-  imageUrl: yup.string().required(),
+yup.addMethod(yup.string, 'validateURL', function validateURL(message) {
+  return this.matches(/^\/users\/[a-zA-Z0-9]+$/, {
+    message,
+    name: 'email',
+    excludeEmptyString: true,
+  });
 });
+
+yup.string().validateURL('Invalid URL');
