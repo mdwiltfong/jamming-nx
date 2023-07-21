@@ -1,4 +1,3 @@
-import { ObjectId, WithId } from 'mongodb';
 import MongoDBHelper, { Model } from '../db.helper';
 import color from 'colors';
 import { validationSchemas } from '../collectionSchemas';
@@ -53,7 +52,7 @@ describe(color.cyan('Model generic tests'), () => {
     );
 
     expect(user).toMatchObject({
-      _id: expect.any(ObjectId),
+      _id: expect.any(String),
       firstName: expect.any(String),
       lastName: expect.any(String),
       email: expect.any(String),
@@ -71,8 +70,8 @@ describe(color.cyan('Model generic tests'), () => {
       }
     );
     expect(playlist).toMatchObject({
-      _id: expect.any(ObjectId),
-      userId: expect.any(ObjectId),
+      _id: expect.any(String),
+      userId: expect.any(String),
       name: expect.any(String),
       spotifyPlayListId: expect.any(String),
       spotifyUserId: expect.any(String),
@@ -87,7 +86,7 @@ describe(color.cyan('Model generic tests'), () => {
       { name: 'users' }
     );
     expect(deletedUser).toMatchObject({
-      _id: expect.any(ObjectId),
+      _id: expect.any(String),
       firstName: expect.any(String),
       lastName: expect.any(String),
       email: expect.any(String),
@@ -110,8 +109,8 @@ describe(color.cyan('Model generic tests'), () => {
       { name: 'playlists' }
     );
     expect(deletedPlayList).toMatchObject({
-      _id: expect.any(ObjectId),
-      userId: expect.any(ObjectId),
+      _id: expect.any(String),
+      userId: expect.any(String),
       name: expect.any(String),
       spotifyPlayListId: expect.any(String),
       spotifyUserId: expect.any(String),
