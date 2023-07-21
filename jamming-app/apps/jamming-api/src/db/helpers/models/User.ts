@@ -17,9 +17,9 @@ export interface IPlaylist<T> {
   imageUrl: String;
 }
 
-export class User implements IUser<ObjectId> {
+export class User implements IUser<String> {
   constructor(
-    public _id: ObjectId,
+    public _id: String,
     public firstName: String,
     public lastName: String,
     public email: String,
@@ -27,10 +27,10 @@ export class User implements IUser<ObjectId> {
   ) {}
 }
 
-export class Playlist implements IPlaylist<ObjectId> {
+export class Playlist implements IPlaylist<String> {
   constructor(
-    public _id: ObjectId,
-    public userId: ObjectId,
+    public _id: String,
+    public userId: String,
     public name: String,
     public spotifyUserId: String,
     public spotifyPlaylistId: String,

@@ -11,7 +11,10 @@ export const userPayloadSchema: yup.ObjectSchema<IUser<String>> = yup.object({
 });
 
 yup.addMethod(yup.string, 'validateURL', function validateURL(message) {
-  return this.matches(/^\/users\/[0-9a-fA-F]+$/, {
+  const regex =
+    /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
+
+  return this.matches(regex, {
     message,
     name: 'email',
     excludeEmptyString: true,

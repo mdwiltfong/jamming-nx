@@ -11,7 +11,7 @@ userRouter.get(
       const { id } = req.params;
       const user = await userModel.findDocument(
         {
-          _id: new Object(id),
+          _id: id,
         },
         { name: 'users' }
       );
