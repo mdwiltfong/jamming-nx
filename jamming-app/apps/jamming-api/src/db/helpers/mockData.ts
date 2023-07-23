@@ -40,7 +40,7 @@ const mockUsers = [
 ];
 const mockPlaylists = [
   {
-    _id: uuidv4(),
+    _id: 'd06e047a-0290-405b-bf39-a42c3bbff280',
     userId: mockUsers[0]._id,
     name: 'Playlist 1',
     spotifyUserId: '6rqhFgbbKwnb9MLmUQDhG6',
@@ -49,7 +49,7 @@ const mockPlaylists = [
       'https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228',
   },
   {
-    _id: uuidv4(),
+    _id: 'b4e59214-c124-42a0-bf9c-578ef9dbe9b2',
     userId: mockUsers[1]._id,
     name: 'Playlist 2',
     spotifyUserId: '6rqhFgbbKwnb9MLmUQDhG6',
@@ -58,7 +58,7 @@ const mockPlaylists = [
       'https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228',
   },
   {
-    _id: uuidv4(),
+    _id: '24b72799-b9d3-488b-a157-21d8c096ab89',
     userId: mockUsers[2]._id,
     name: 'Playlist 3',
     spotifyUserId: '6rqhFgbbKwnb9MLmUQDhG6',
@@ -67,7 +67,7 @@ const mockPlaylists = [
       'https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228',
   },
   {
-    _id: uuidv4(),
+    _id: '979a9bd7-14a4-4022-9ed2-ee1ac05e31a2',
     userId: mockUsers[3]._id,
     name: 'Playlist 4',
     spotifyUserId: '6rqhFgbbKwnb9MLmUQDhG6',
@@ -76,7 +76,7 @@ const mockPlaylists = [
       'https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228',
   },
   {
-    _id: uuidv4(),
+    _id: 'f38307b4-f717-4553-90d0-916a33943e1b',
     userId: mockUsers[4]._id,
     name: 'Playlist 5',
     spotifyUserId: '6rqhFgbbKwnb9MLmUQDhG6',
