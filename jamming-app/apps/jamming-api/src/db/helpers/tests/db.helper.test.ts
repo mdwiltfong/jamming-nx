@@ -28,20 +28,19 @@ describe(color.cyan('MongoDBHelper can  load collection'), () => {
     );
   });
 });
-
+beforeAll(async () => {
+  await MongoDBHelper.loadCollection(
+    'users',
+    validationSchemas.userValidationSchema,
+    mockData.mockUsers
+  );
+  await MongoDBHelper.loadCollection(
+    'playlists',
+    validationSchemas.playlistValidationSchema,
+    mockData.mockPlaylists
+  );
+});
 describe(color.cyan('Model generic tests'), () => {
-  beforeAll(async () => {
-    await MongoDBHelper.loadCollection(
-      'users',
-      validationSchemas.userValidationSchema,
-      mockData.mockUsers
-    );
-    await MongoDBHelper.loadCollection(
-      'playlists',
-      validationSchemas.playlistValidationSchema,
-      mockData.mockPlaylists
-    );
-  });
   test('Can find user document', async () => {
     const userModel = new Model<User>('user');
     const user = await userModel.findDocument(
