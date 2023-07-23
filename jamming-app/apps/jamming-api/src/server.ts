@@ -2,8 +2,9 @@ import express, { Express, NextFunction, Request, Response } from 'express';
 import morgan from 'morgan';
 import userRouter from './routes/userRouter';
 import { validateURL } from './schemas/userSchema';
+import ServerErrorHandler from './db/helpers/error_handlers/ServerErrorHandler';
 const app: Express = express();
-app.use(morgan('tiny'));
+app.use(morgan('combined'));
 app.get('/status', (req: Request, res: Response) => {
   res.status(200).json({ message: 'Hello World' });
 });
@@ -12,13 +13,18 @@ app.use('/users', validateURL, userRouter);
 
 app.use(
   (
-    err: Error,
+    err: ServerErrorHandler,
     req: express.Request,
     res: express.Response,
     next: express.NextFunction
   ) => {
-    res.status(500).json({ message: err.message });
-    console.error(err);
+    const respBody = {
+      errorCode: err.errorCode,
+      errorSummary: err.errorSummary,
+      errorLink: err.errorLink,
+      errorId: err.errorId,
+    };
+    res.status(err.errorHTTPCode).json(respBody);
   }
 );
 
