@@ -10,28 +10,28 @@ export const userPayloadSchema: yup.ObjectSchema<IUser<String>> = yup.object({
   password: yup.string().required(),
 });
 
-yup.addMethod(yup.string, 'validateURL', function validateURL(message) {
-  const regex =
-    /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
+const urlSchema = yup.string().test(
+  'validUrl',
+  (d: yup.ValidationError) => `${d.value} is not a valid URL`,
+  (URL) => {
+    const regex =
+      /^[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}$/i;
+    return regex.test(URL);
+  }
+);
 
-  return this.matches(regex, {
-    message,
-    name: 'email',
-    excludeEmptyString: true,
-  });
-});
-
-yup.string().validateURL('Invalid URL');
-
-export function validateURL(req: Request, res: Response, next: NextFunction) {
+export async function validateURL(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   try {
     const url = req.url;
-    if (yup.string().validateURL(url)) {
+
+    if (urlSchema.validateSync(url)) {
       console.log(url + ' is a valid URL');
       next();
       return true;
-    } else {
-      throw new Error('Invalid URL');
     }
   } catch (error) {
     next(error);
