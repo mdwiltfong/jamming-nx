@@ -3,6 +3,7 @@ import morgan from 'morgan';
 import userRouter from './routes/userRouter';
 import { validateURL } from './schemas/userSchema';
 import ServerErrorHandler from './db/helpers/error_handlers/ServerErrorHandler';
+import playlistRouter from './routes/playlistRouter';
 const app: Express = express();
 app.use(morgan('combined'));
 app.get('/status', (req: Request, res: Response) => {
@@ -10,7 +11,7 @@ app.get('/status', (req: Request, res: Response) => {
 });
 
 app.use('/users', validateURL, userRouter);
-
+app.use('/playlists', validateURL, playlistRouter);
 app.use(
   (
     err: ServerErrorHandler,

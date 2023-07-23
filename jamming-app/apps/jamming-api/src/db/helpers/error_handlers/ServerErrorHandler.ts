@@ -2,6 +2,7 @@ export enum ErrorCodes {
   APIValidationError = 100,
   APIAuthenticationError = 200,
   APIIncorrectURLFormatError = 300,
+  APINotFoundError = 400,
 }
 
 interface IServerErrorHandler {
