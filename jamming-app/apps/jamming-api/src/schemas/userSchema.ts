@@ -15,7 +15,7 @@ const urlSchema = yup.string().test(
   (d: yup.ValidationError) => `${d.value} is not a valid URL`,
   (URL) => {
     const regex =
-      /^[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}$/i;
+      /^\/[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}$/i;
     return regex.test(URL);
   }
 );
