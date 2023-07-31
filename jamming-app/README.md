@@ -9,7 +9,22 @@ A web application that allows users to search for songs from Spotify and save th
 3. Create a .env file at the root of the project using the .env.example file as a template
 4. Start the development server with npm start
 
-GitHub Copilot: Sure, here's an updated version of the database structure section without the `songs` collection:
+## Database
+
+The app uses MongoDB to store user data. In development, we used MongoDB's Atlas. Contributors will need to create their own instance on Atlas and update the connection string in the `.env` file.
+
+### Connecting to the Database
+
+To connect to the database, you'll need to create a `.env` file at the root of the project with the following field:
+
+MONGODB_URI: the connection string for your MongoDB instance
+
+Here's an example connection string:
+`mongodb+srv://<username>:<password>@<cluster>.jjezsdh.mongodb.net/<dbname>?retryWrites=true&w=majority`
+
+Replace <username> and <password> with your MongoDB Atlas username and password, <cluster> with the name of your MongoDB Atlas cluster, and <dbname> with the name of the database you want to use.
+
+While in development, you can run the tests to see if your local enviornment is able to connect to your database.
 
 ## Database Structure
 
@@ -31,6 +46,78 @@ The `playlists` collection stores information about each playlist, including its
 - `name`: name of the playlist
 - `userId`: ID of the user who created the playlist
 - `songIds`: array of song IDs for the songs in the playlist
+
+GitHub Copilot: Sure, here's an example section you could add to your README file:
+
+## API Routes
+
+The app uses the following API routes:
+
+### GET /status
+
+Returns a JSON object with a message indicating that the server is running.
+
+### GET /users
+
+Returns a JSON array of all users in the database.
+
+### POST /users
+
+Creates a new user in the database. Expects a JSON object with the following fields:
+
+- `spotifyId`: Spotify user ID
+- `accessToken`: Spotify access token
+
+Returns a JSON object with the ID of the new user.
+
+### GET /users/:id
+
+Returns a JSON object with the user information for the specified ID.
+
+### PUT /users/:id
+
+Updates the user information for the specified ID. Expects a JSON object with the following fields:
+
+- `accessToken`: Spotify access token
+
+Returns a JSON object with the updated user information.
+
+### DELETE /users/:id
+
+Deletes the user with the specified ID.
+
+### GET /playlists
+
+Returns a JSON array of all playlists in the database.
+
+### POST /playlists
+
+Creates a new playlist in the database. Expects a JSON object with the following fields:
+
+- `name`: name of the playlist
+- `userId`: ID of the user who created the playlist
+- `songIds`: array of song IDs for the songs in the playlist
+
+Returns a JSON object with the ID of the new playlist.
+
+### GET /playlists/:id
+
+Returns a JSON object with the playlist information for the specified ID.
+
+### PUT /playlists/:id
+
+Updates the playlist information for the specified ID. Expects a JSON object with the following fields:
+
+- `name`: name of the playlist
+- `songIds`: array of song IDs for the songs in the playlist
+
+Returns a JSON object with the updated playlist information.
+
+### DELETE /playlists/:id
+
+Deletes the playlist with the specified ID.
+
+Let me know if you have any other questions!
 
 ## Usage
 
