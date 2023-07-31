@@ -1,0 +1,147 @@
+{
+	"info": {
+		"_postman_id": "c556db16-ab02-4980-bd27-c1d03876662e",
+		"name": "Jamming-NX API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "15821467"
+	},
+	"item": [
+		{
+			"name": "Get User - Correctly Formated URL",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "  {\r\n  \"_id\": \"00000002cfb4242a36215056\",\r\n  \"firstName\": \"Bob\",\r\n  \"lastName\": \"Johnson\",\r\n  \"email\": \"charlie.brown@example.com\" ,\r\n  \"password\": \"U2FsdGVkX19nR6kAxLmriGbdDMIS/RF3NyrQyD5NwA4=\"\r\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{localUrl}}/users/269ae06f-fb32-4935-85e1-3df76e42d92f",
+					"host": [
+						"{{localUrl}}"
+					],
+					"path": [
+						"users",
+						"269ae06f-fb32-4935-85e1-3df76e42d92f"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get User - Incorrectly Formated URL",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "  {\r\n  \"_id\": \"00000002cfb4242a36215056\",\r\n  \"firstName\": \"Bob\",\r\n  \"lastName\": \"Johnson\",\r\n  \"email\": \"charlie.brown@example.com\" ,\r\n  \"password\": \"U2FsdGVkX19nR6kAxLmriGbdDMIS/RF3NyrQyD5NwA4=\"\r\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{localUrl}}/users/cheese",
+					"host": [
+						"{{localUrl}}"
+					],
+					"path": [
+						"users",
+						"cheese"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Playlist - Correctly Formatted URL",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "  {\r\n  \"_id\": \"00000002cfb4242a36215056\",\r\n  \"firstName\": \"Bob\",\r\n  \"lastName\": \"Johnson\",\r\n  \"email\": \"charlie.brown@example.com\" ,\r\n  \"password\": \"U2FsdGVkX19nR6kAxLmriGbdDMIS/RF3NyrQyD5NwA4=\"\r\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{localUrl}}/playlists/60173c19-f73f-4ba3-8061-41b11ab739e4",
+					"host": [
+						"{{localUrl}}"
+					],
+					"path": [
+						"playlists",
+						"60173c19-f73f-4ba3-8061-41b11ab739e4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Playlist - Incorrectly Formatted URL",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "  {\r\n  \"_id\": \"00000002cfb4242a36215056\",\r\n  \"firstName\": \"Bob\",\r\n  \"lastName\": \"Johnson\",\r\n  \"email\": \"charlie.brown@example.com\" ,\r\n  \"password\": \"U2FsdGVkX19nR6kAxLmriGbdDMIS/RF3NyrQyD5NwA4=\"\r\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{localUrl}}/playlists/cheese",
+					"host": [
+						"{{localUrl}}"
+					],
+					"path": [
+						"playlists",
+						"cheese"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Status Check",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{localUrl}}/status",
+					"host": [
+						"{{localUrl}}"
+					],
+					"path": [
+						"status"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
