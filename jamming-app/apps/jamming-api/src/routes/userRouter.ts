@@ -33,4 +33,20 @@ userRouter.get(
     }
   }
 );
+
+userRouter.post(
+  '/:id',
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params;
+      const deletedUser = await userModel.deleteDocument(
+        { _id: id },
+        { name: 'users' }
+      );
+      return deletedUser;
+    } catch (error) {
+      return next(error);
+    }
+  }
+);
 export default userRouter;
