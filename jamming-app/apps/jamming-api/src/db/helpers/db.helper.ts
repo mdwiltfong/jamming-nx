@@ -95,12 +95,14 @@ class MongoDBHelper {
     }
   }
   public static async findUser(
-    userId: Condition<ObjectId>
+    userId: Condition<String>
   ): Promise<User | null> {
     try {
       await this.connect();
-      const userCollection = this.client.db('cluster0').collection('users');
-      const user: User = (await userCollection.findOne(userId)) as User;
+      const userCollection = this.client
+        .db('cluster0')
+        .collection<User>('users');
+      const user: User = await userCollection.findOne(userId);
       if (user === null) {
         throw new Error('No user found');
       }
@@ -114,8 +116,10 @@ class MongoDBHelper {
   public static async findUsers(): Promise<User[] | Error> {
     try {
       await this.connect();
-      const userCollection = this.client.db('cluster0').collection('users');
-      const users: User[] = (await userCollection.find().toArray()) as User[];
+      const userCollection = this.client
+        .db('cluster0')
+        .collection<User>('users');
+      const users: User[] = await userCollection.find().toArray();
       if (users.length === 0) {
         throw new Error('No users found');
       }
@@ -149,9 +153,6 @@ export class Model<T extends User | Playlist> {
         collectionName
       )) as Collection<T>;
       const document = await collection.findOne(query);
-      if (document === null) {
-        throw new Error('No user found');
-      }
       return document as T;
     } catch (error) {
       throw new MongoDBErrorHandler(error);

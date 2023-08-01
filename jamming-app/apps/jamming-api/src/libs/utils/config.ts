@@ -21,7 +21,7 @@ interface Config extends ENV {}
 const getConfig = (): ENV => {
   return {
     NODE_ENV: process.env.NODE_ENV,
-    PORT: process.env.PORT ? Number(process.env.PORT) : undefined,
+    PORT: process.env.PORT ? Number(process.env.PORT) : 4000,
     EXPRESS_URL_DEV: process.env.EXPRESS_URL_DEV,
     SPOTIFY_ACCOUNTS_URL: process.env.SPOTIFY_ACCOUNTS_URL,
     SPOTIFY_API_URL: process.env.SPOTIFY_API_URL,

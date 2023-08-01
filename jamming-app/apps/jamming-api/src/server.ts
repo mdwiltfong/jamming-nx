@@ -1,43 +1,31 @@
-import express, { Express, Request, Response } from 'express';
-import { Model } from './db/helpers/db.helper';
-import { User } from './db/helpers/models/User';
-import MongoDBErrorHandler from './db/errorHandlers/MongoDBErrorHandler';
-import { ObjectId } from 'mongodb';
-
-const userModel = new Model<User>('users');
+import express, { Express, NextFunction, Request, Response } from 'express';
+import morgan from 'morgan';
+import userRouter from './routes/userRouter';
+import { validateURL } from './schemas/userSchema';
+import ServerErrorHandler from './db/helpers/error_handlers/ServerErrorHandler';
+import playlistRouter from './routes/playlistRouter';
 const app: Express = express();
-
+app.use(morgan('combined'));
 app.get('/status', (req: Request, res: Response) => {
   res.status(200).json({ message: 'Hello World' });
 });
 
-app.get('/users', async (req: Request, res: Response) => {
-  try {
-    const { body } = req;
-    const { id } = body;
-    const user = await userModel.findDocument(
-      {
-        _id: new ObjectId(id),
-      },
-      { name: 'users' }
-    );
-    return res.status(200).json(user);
-  } catch (error) {
-    if (error instanceof MongoDBErrorHandler) {
-      throw new Error(error.message);
-    }
-  }
-});
-
+app.use('/users', validateURL, userRouter);
+app.use('/playlists', validateURL, playlistRouter);
 app.use(
   (
-    err: Error,
+    err: ServerErrorHandler,
     req: express.Request,
     res: express.Response,
     next: express.NextFunction
   ) => {
-    res.json({ message: err.message });
-    console.error(err);
+    const respBody = {
+      errorCode: err.errorCode,
+      errorSummary: err.errorSummary,
+      errorLink: err.errorLink,
+      errorId: err.errorId,
+    };
+    res.status(err.errorHTTPCode).json(respBody);
   }
 );
 

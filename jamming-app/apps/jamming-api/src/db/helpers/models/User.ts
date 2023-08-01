@@ -1,8 +1,25 @@
 import { ObjectId } from 'mongodb';
 
-export class User {
+export interface IUser<T> {
+  _id: T;
+  firstName: String;
+  lastName: String;
+  email: String;
+  password: String;
+}
+
+export interface IPlaylist<T> {
+  _id: T;
+  userId: T;
+  name: String;
+  spotifyUserId: String;
+  spotifyPlaylistId: String;
+  imageUrl: String;
+}
+
+export class User implements IUser<String> {
   constructor(
-    public _id: ObjectId,
+    public _id: String,
     public firstName: String,
     public lastName: String,
     public email: String,
@@ -10,10 +27,10 @@ export class User {
   ) {}
 }
 
-export class Playlist {
+export class Playlist implements IPlaylist<String> {
   constructor(
-    public _id: ObjectId,
-    public userId: ObjectId,
+    public _id: String,
+    public userId: String,
     public name: String,
     public spotifyUserId: String,
     public spotifyPlaylistId: String,

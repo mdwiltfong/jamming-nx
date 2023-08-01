@@ -1,4 +1,3 @@
-import { ObjectId, WithId } from 'mongodb';
 import MongoDBHelper, { Model } from '../db.helper';
 import color from 'colors';
 import { validationSchemas } from '../collectionSchemas';
@@ -29,20 +28,19 @@ describe(color.cyan('MongoDBHelper can  load collection'), () => {
     );
   });
 });
-
+beforeAll(async () => {
+  await MongoDBHelper.loadCollection(
+    'users',
+    validationSchemas.userValidationSchema,
+    mockData.mockUsers
+  );
+  await MongoDBHelper.loadCollection(
+    'playlists',
+    validationSchemas.playlistValidationSchema,
+    mockData.mockPlaylists
+  );
+});
 describe(color.cyan('Model generic tests'), () => {
-  beforeAll(async () => {
-    await MongoDBHelper.loadCollection(
-      'users',
-      validationSchemas.userValidationSchema,
-      mockData.mockUsers
-    );
-    await MongoDBHelper.loadCollection(
-      'playlists',
-      validationSchemas.playlistValidationSchema,
-      mockData.mockPlaylists
-    );
-  });
   test('Can find user document', async () => {
     const userModel = new Model<User>('user');
     const user = await userModel.findDocument(
@@ -53,7 +51,7 @@ describe(color.cyan('Model generic tests'), () => {
     );
 
     expect(user).toMatchObject({
-      _id: expect.any(ObjectId),
+      _id: expect.any(String),
       firstName: expect.any(String),
       lastName: expect.any(String),
       email: expect.any(String),
@@ -71,8 +69,8 @@ describe(color.cyan('Model generic tests'), () => {
       }
     );
     expect(playlist).toMatchObject({
-      _id: expect.any(ObjectId),
-      userId: expect.any(ObjectId),
+      _id: expect.any(String),
+      userId: expect.any(String),
       name: expect.any(String),
       spotifyPlayListId: expect.any(String),
       spotifyUserId: expect.any(String),
@@ -87,7 +85,7 @@ describe(color.cyan('Model generic tests'), () => {
       { name: 'users' }
     );
     expect(deletedUser).toMatchObject({
-      _id: expect.any(ObjectId),
+      _id: expect.any(String),
       firstName: expect.any(String),
       lastName: expect.any(String),
       email: expect.any(String),
@@ -110,8 +108,8 @@ describe(color.cyan('Model generic tests'), () => {
       { name: 'playlists' }
     );
     expect(deletedPlayList).toMatchObject({
-      _id: expect.any(ObjectId),
-      userId: expect.any(ObjectId),
+      _id: expect.any(String),
+      userId: expect.any(String),
       name: expect.any(String),
       spotifyPlayListId: expect.any(String),
       spotifyUserId: expect.any(String),
