@@ -13,6 +13,7 @@ import config from '../../libs/utils/config';
 import color from 'colors';
 import { Playlist, User } from './models/User';
 import MongoDBErrorHandler from '../errorHandlers/MongoDBErrorHandler';
+import BaseError from '../errorHandlers/BaseError';
 class MongoDBHelper {
   private static connectionString: string = config.MONGODB_URI;
   private static cluster: string = 'cluster0';
@@ -153,6 +154,14 @@ export class Model<T extends User | Playlist> {
         collectionName
       )) as Collection<T>;
       const document = await collection.findOne(query);
+      if (document === null) {
+        throw new BaseError(
+          'No document found',
+          404,
+          `No document found with the query ${query}`,
+          true
+        );
+      }
       return document as T;
     } catch (error) {
       throw new MongoDBErrorHandler(error);
@@ -197,7 +206,12 @@ export class Model<T extends User | Playlist> {
       const collection = await this.findCollection(collectName);
       const document = await collection.findOneAndDelete(query);
       if (document === null) {
-        throw new Error('No user found');
+        throw new BaseError(
+          'No document found',
+          404,
+          `No document found with the query ${query}`,
+          true
+        );
       }
       console.log(document);
       return document.value as User;
