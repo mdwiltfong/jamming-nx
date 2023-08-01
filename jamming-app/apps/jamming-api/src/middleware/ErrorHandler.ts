@@ -1,4 +1,5 @@
 import express, { Express, NextFunction, Request, Response } from 'express';
+import colors from 'colors';
 import BaseError from '../db/errorHandlers/BaseError';
 const ErrorHandler = (
   err: any,
@@ -7,14 +8,14 @@ const ErrorHandler = (
   next: NextFunction
 ) => {
   if (err instanceof BaseError) {
-    console.log('Middleware Error Hadnling');
-    const errStatus = err.httpCode || 500;
+    console.log(colors.red.underline('Middleware Error Handling'));
+    const errStatus = err.httpCode;
     const errMsg = err.message;
+    console.error(JSON.stringify(err.stack));
     res.status(errStatus).json({
       success: false,
       status: errStatus,
       message: errMsg,
-      stack: err.stack,
     });
   } else {
     res.status(500).json({ message: 'Something went wrong' });

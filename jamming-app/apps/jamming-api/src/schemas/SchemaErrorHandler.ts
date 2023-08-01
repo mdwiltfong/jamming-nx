@@ -1,16 +1,8 @@
-import colors from 'colors';
-import ServerErrorHandler, {
-  ErrorCodes,
-} from '../db/helpers/error_handlers/ServerErrorHandler';
+import BaseError from '../db/errorHandlers/BaseError';
 
-export default class SchemaErrorHandler extends ServerErrorHandler {
+// TODO: All error classes need to inherit from BaseError class
+export default class SchemaErrorHandler extends BaseError {
   constructor(message: string) {
-    super(
-      ErrorCodes.APIIncorrectURLFormatError,
-      400,
-      message,
-      'Invalid URL',
-      '1234'
-    );
+    super('Schema Validation Error', 400, message, true);
   }
 }
