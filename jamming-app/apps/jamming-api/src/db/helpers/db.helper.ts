@@ -14,6 +14,7 @@ import color from 'colors';
 import { Playlist, User } from './models/User';
 import MongoDBErrorHandler from '../errorHandlers/MongoDBErrorHandler';
 import BaseError from '../errorHandlers/BaseError';
+import { DocumentNotFoundError } from './error_handlers/DocumentNotFoundError';
 class MongoDBHelper {
   private static connectionString: string = config.MONGODB_URI;
   private static cluster: string = 'cluster0';
@@ -154,14 +155,6 @@ export class Model<T extends User | Playlist> {
         collectionName
       )) as Collection<T>;
       const document = await collection.findOne(query);
-      if (document === null) {
-        throw new BaseError(
-          'No document found',
-          404,
-          `No document found with the query ${query}`,
-          true
-        );
-      }
       return document as T;
     } catch (error) {
       throw new MongoDBErrorHandler(error);

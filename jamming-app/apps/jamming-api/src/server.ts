@@ -2,7 +2,6 @@ import express, { Express, NextFunction, Request, Response } from 'express';
 import morgan from 'morgan';
 import userRouter from './routes/userRouter';
 import { validateURL } from './schemas/userSchema';
-import ServerErrorHandler from './db/helpers/error_handlers/ServerErrorHandler';
 import playlistRouter from './routes/playlistRouter';
 import ErrorHandler from './middleware/ErrorHandler';
 const app: Express = express();

@@ -1,9 +1,7 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import { Model } from '../db/helpers/db.helper';
 import { User } from '../db/helpers/models/User';
-import ServerErrorHandler, {
-  ErrorCodes,
-} from '../db/helpers/error_handlers/ServerErrorHandler';
+import { DocumentNotFoundError } from '../db/helpers/error_handlers/DocumentNotFoundError';
 const userModel = new Model<User>('users');
 const userRouter = Router();
 
@@ -19,13 +17,7 @@ userRouter.get(
         { name: 'users' }
       );
       if (user == null) {
-        throw new ServerErrorHandler(
-          ErrorCodes.APINotFoundError,
-          404,
-          'User not found',
-          'link',
-          '1234'
-        );
+        throw new DocumentNotFoundError(`User not found with id ${id}`);
       }
       return res.status(200).json(user);
     } catch (error) {
