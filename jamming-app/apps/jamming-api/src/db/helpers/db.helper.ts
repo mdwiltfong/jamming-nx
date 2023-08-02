@@ -5,16 +5,14 @@ import {
   CreateCollectionOptions,
   Filter,
   MongoClient,
-  ObjectId,
   ServerApiVersion,
-  WithId,
 } from 'mongodb';
 import config from '../../libs/utils/config';
 import color from 'colors';
 import { Playlist, User } from './models/User';
 import MongoDBErrorHandler from '../errorHandlers/MongoDBErrorHandler';
 import BaseError from '../errorHandlers/BaseError';
-import { DocumentNotFoundError } from './error_handlers/DocumentNotFoundError';
+import OAuth from 'oauth2-server';
 class MongoDBHelper {
   private static connectionString: string = config.MONGODB_URI;
   private static cluster: string = 'cluster0';
@@ -135,6 +133,23 @@ class MongoDBHelper {
 
   public static getClient(): MongoClient {
     return this.client;
+  }
+  public static async findToken(token: OAuth.Token) {
+    try {
+      await this.connect();
+      const tokenCollection = this.client
+        .db('cluster0')
+        .collection<OAuth.Token>('tokens');
+      const tkn: OAuth.Token = await tokenCollection.findOne(token);
+      if (tkn === null) {
+        throw new Error('No token found');
+      }
+      return tkn;
+    } catch (error) {
+      throw new MongoDBErrorHandler(error);
+    } finally {
+      await this.disconnect();
+    }
   }
 }
 
