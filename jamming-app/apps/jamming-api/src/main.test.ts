@@ -45,14 +45,24 @@ describe('User Router Tests', () => {
   });
   test("GET /users/:id returns a 404 if the user doesn't exist", async () => {
     const response: Response = await supertest(app).get(
-      '/users//269ae06f-fb32-4935-85e1-3df76e42d92a'
+      '/users/269ae06f-fb32-4935-85e1-3df76e42d92a'
     );
     expect(response.status).toBe(404);
     expect(response.body).toMatchObject({
-      errorCode: 400,
-      errorSummary: 'User not found',
-      errorLink: 'link',
-      errorId: '1234',
+      success: false,
+      status: 404,
+      message: 'User not found with id 269ae06f-fb32-4935-85e1-3df76e42d92a',
+    });
+  });
+  test('GET /users/:id returns a 400 if the user ID is not a valid UUID', async () => {
+    const response: Response = await supertest(app).get(
+      '/users/not-a-valid-uuid'
+    );
+    expect(response.status).toBe(400);
+    expect(response.body).toMatchObject({
+      success: false,
+      status: 400,
+      message: 'Invalid URL format',
     });
   });
 });
@@ -79,10 +89,21 @@ describe('Playlist Router Tests', () => {
     );
     expect(response.status).toBe(404);
     expect(response.body).toMatchObject({
-      errorCode: 400,
-      errorSummary: 'Playlist not found',
-      errorLink: 'link',
-      errorId: '1234',
+      success: false,
+      status: 404,
+      message:
+        'Playlist not found with id 269ae06f-fb32-4935-85e1-3df76e42d92a',
+    });
+  });
+  test('GET /playlists/:id returns a 400 if the playlist ID is not a valid UUID', async () => {
+    const response: Response = await supertest(app).get(
+      '/playlists/not-a-valid-uuid'
+    );
+    expect(response.status).toBe(400);
+    expect(response.body).toMatchObject({
+      success: false,
+      status: 400,
+      message: 'Invalid URL format',
     });
   });
 });
