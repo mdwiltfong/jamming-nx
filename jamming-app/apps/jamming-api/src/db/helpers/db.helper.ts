@@ -173,24 +173,24 @@ export class MongoDBHelper {
       await this.disconnect();
     }
   }
-  public static async saveAccessToken(accessToken: OAuth.Token) {
+  public static async saveAccessToken(
+    accessToken: OAuth.Token
+  ): Promise<OAuth.Token> {
     try {
       await this.connect();
       const tokenCollection = this.client
         .db('cluster0')
         .collection<OAuth.Token>('tokens');
-      const token: OAuth.Token = await tokenCollection.insertOne(accessToken);
-      if (token === null) {
-        throw new Error('No token found');
+      const result = await tokenCollection.insertOne(accessToken);
+      if (result.insertedId === null) {
+        throw new Error('Failed to insert token');
       }
-      return token;
+      return accessToken;
     } catch (error) {
       throw new MongoDBErrorHandler(error);
     } finally {
       await this.disconnect();
     }
-  }
-
   }
 }
 

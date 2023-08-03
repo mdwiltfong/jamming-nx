@@ -34,6 +34,8 @@ const model: PasswordModel = {
     callback?: OAuth.Callback<OAuth.Token>
   ): Promise<Token | Falsey> => {
     // logic to save token to database
+    try {
+    } catch (error) {}
   },
   getUser: async (
     username: string,
