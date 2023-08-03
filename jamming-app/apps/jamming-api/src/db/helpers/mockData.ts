@@ -101,6 +101,7 @@ const mockPlaylists: Playlist[] = [
 ];
 
 interface Token {
+  _id: string;
   accessToken: string;
   refreshToken: string;
   userId: string;
@@ -110,6 +111,7 @@ interface Token {
 
 const mockTokens: Token[] = [
   {
+    _id: 'd06e047a-0290-405b-bf39-a42c3bbff280',
     accessToken: uuidv4(),
     refreshToken: uuidv4(),
     userId: '40fdf6ee-8403-4f5a-bc62-020dab7c43a8',
@@ -117,6 +119,7 @@ const mockTokens: Token[] = [
     expiresAt: new Date(Date.now() + 3600 * 1000), // Expires in 1 hour
   },
   {
+    _id: 'b4e59214-c124-42a0-bf9c-578ef9dbe9b2',
     accessToken: uuidv4(),
     refreshToken: uuidv4(),
     userId: '269ae06f-fb32-4935-85e1-3df76e42d92f',
@@ -124,6 +127,7 @@ const mockTokens: Token[] = [
     expiresAt: new Date(Date.now() + 3600 * 1000), // Expires in 1 hour
   },
   {
+    _id: '24b72799-b9d3-488b-a157-21d8c096ab89',
     accessToken: uuidv4(),
     refreshToken: uuidv4(),
     userId: 'adf3677a-5377-49ca-8338-071daa0ed211',

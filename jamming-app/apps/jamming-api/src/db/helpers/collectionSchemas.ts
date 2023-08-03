@@ -86,7 +86,54 @@ const playlistValidationSchema: CustomCreateCollectionOptions = {
   },
 };
 
-export const validationSchemas = {
+const tokensSchema: CustomCreateCollectionOptions = {
+  validator: {
+    $jsonSchema: {
+      bsonType: 'object',
+      title: 'Token Object Schema',
+      required: [
+        '_id',
+        'accessToken',
+        'refreshToken',
+        'userId',
+        'expiresAt',
+        'clientId',
+      ],
+      properties: {
+        _id: {
+          bsonType: 'string',
+        },
+        userId: {
+          bsonType: 'string',
+        },
+        accessToken: {
+          bsonType: 'string',
+          description: 'must be a string and is required',
+        },
+        refreshToken: {
+          bsonType: 'string',
+          description: 'must be a string and is required',
+        },
+        clientId: {
+          bsonType: 'string',
+          description: 'must be a string and is required',
+        },
+        expiresAt: {
+          bsonType: 'date',
+          description: 'must be a date and is required',
+        },
+      },
+      additionalProperties: false,
+    },
+  },
+};
+
+export const validationSchemas: {
+  userValidationSchema: CustomCreateCollectionOptions;
+  playlistValidationSchema: CustomCreateCollectionOptions;
+  tokensValidationSchema: CustomCreateCollectionOptions;
+} = {
   userValidationSchema: userValidationSchema,
   playlistValidationSchema: playlistValidationSchema,
+  tokensValidationSchema: tokensSchema,
 };

@@ -4,7 +4,8 @@
   "license": "MIT",
   "scripts": {
     "loadCollection:users": "node ./dist/apps/jamming-api/apps/jamming-api/src/db/helpers/loadUsersCollection.js",
-    "loadCollection:playlists": "node ./dist/apps/jamming-api/apps/jamming-api/src/db/helpers/loadPlayListsCollection.js"
+    "loadCollection:playlists": "node ./dist/apps/jamming-api/apps/jamming-api/src/db/helpers/loadPlayListsCollection.js",
+    "loadCollection:tokens": "node ./dist/apps/jamming-api/apps/jamming-api/src/db/helpers/loadTokenCollection.js"
   },
   "private": true,
   "dependencies": {

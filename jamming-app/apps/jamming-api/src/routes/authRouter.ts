@@ -1,7 +1,7 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import OAuth, { Falsey, PasswordModel, Token, Client } from 'oauth2-server';
 const authRouter = Router();
-const model: PasswordModel = {
+/* const model: PasswordModel = {
   getAccessToken: async (
     accessToken: string,
     callback?: OAuth.Callback<OAuth.Token>
@@ -41,4 +41,4 @@ const oauth = new OAuth({
 authRouter.use();
 authRouter.get('/login', (req: Request, res: Response) => {});
 
-export default authRouter;
+export default authRouter; */
