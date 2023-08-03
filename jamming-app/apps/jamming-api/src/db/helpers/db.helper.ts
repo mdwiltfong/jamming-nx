@@ -13,7 +13,7 @@ import { Playlist, User } from './models/User';
 import MongoDBErrorHandler from '../errorHandlers/MongoDBErrorHandler';
 import BaseError from '../errorHandlers/BaseError';
 import OAuth from 'oauth2-server';
-class MongoDBHelper {
+export class MongoDBHelper {
   private static connectionString: string = config.MONGODB_URI;
   private static cluster: string = 'cluster0';
   private static client: MongoClient = this.generateMongoClient();
@@ -134,13 +134,15 @@ class MongoDBHelper {
   public static getClient(): MongoClient {
     return this.client;
   }
-  public static async findToken(token: OAuth.Token) {
+  public static async findToken(token: string) {
     try {
       await this.connect();
       const tokenCollection = this.client
         .db('cluster0')
         .collection<OAuth.Token>('tokens');
-      const tkn: OAuth.Token = await tokenCollection.findOne(token);
+      const tkn: OAuth.Token = await tokenCollection.findOne({
+        accessToken: token,
+      });
       if (tkn === null) {
         throw new Error('No token found');
       }
@@ -150,6 +152,45 @@ class MongoDBHelper {
     } finally {
       await this.disconnect();
     }
+  }
+  public static async findClient(clientId: string, clientSecret?: string) {
+    try {
+      await this.connect();
+      const clientCollection = this.client
+        .db('cluster0')
+        .collection<OAuth.Client>('clients');
+      const client: OAuth.Client = await clientCollection.findOne({
+        clientId: clientId,
+        clientSecret: clientSecret,
+      });
+      if (client === null) {
+        throw new Error('No client found');
+      }
+      return client;
+    } catch (error) {
+      throw new MongoDBErrorHandler(error);
+    } finally {
+      await this.disconnect();
+    }
+  }
+  public static async saveAccessToken(accessToken: OAuth.Token) {
+    try {
+      await this.connect();
+      const tokenCollection = this.client
+        .db('cluster0')
+        .collection<OAuth.Token>('tokens');
+      const token: OAuth.Token = await tokenCollection.insertOne(accessToken);
+      if (token === null) {
+        throw new Error('No token found');
+      }
+      return token;
+    } catch (error) {
+      throw new MongoDBErrorHandler(error);
+    } finally {
+      await this.disconnect();
+    }
+  }
+
   }
 }
 

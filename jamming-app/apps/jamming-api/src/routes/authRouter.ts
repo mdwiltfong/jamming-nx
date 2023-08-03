@@ -1,18 +1,31 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import OAuth, { Falsey, PasswordModel, Token, Client } from 'oauth2-server';
+import { MongoDBHelper } from '../db/helpers/db.helper';
 const authRouter = Router();
-/* const model: PasswordModel = {
+const model: PasswordModel = {
   getAccessToken: async (
     accessToken: string,
     callback?: OAuth.Callback<OAuth.Token>
   ): Promise<Token | Falsey> => {
     // logic to retrieve access token from database
+    try {
+      const token = await MongoDBHelper.findToken(accessToken);
+      return token;
+    } catch (error) {
+      console.log(error);
+    }
   },
   getClient: async (
     clientId: string,
     clientSecret: string
   ): Promise<Client | Falsey> => {
     // logic to retrieve client from database
+    try {
+      const client = await MongoDBHelper.findClient(clientId, clientSecret);
+      return client;
+    } catch (error) {
+      console.log(error);
+    }
   },
   saveToken: async (
     token: OAuth.Token,
@@ -41,4 +54,4 @@ const oauth = new OAuth({
 authRouter.use();
 authRouter.get('/login', (req: Request, res: Response) => {});
 
-export default authRouter; */
+export default authRouter;
