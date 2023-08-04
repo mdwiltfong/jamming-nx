@@ -4,13 +4,13 @@ import userRouter from './routes/userRouter';
 import { validateURL } from './schemas/userSchema';
 import playlistRouter from './routes/playlistRouter';
 import ErrorHandler from './middleware/ErrorHandler';
-//import authRouter from './routes/authRouter';
+import authRouter from './routes/authRouter';
 const app: Express = express();
 app.use(morgan('combined'));
 app.get('/status', (req: Request, res: Response) => {
   res.status(200).json({ message: 'Hello World' });
 });
-//app.all('/auth', authRouter);
+app.all('/auth', authRouter);
 app.use('/users', validateURL, userRouter);
 app.use('/playlists', validateURL, playlistRouter);
 app.use(ErrorHandler);

@@ -158,10 +158,9 @@ export class MongoDBHelper {
       await this.connect();
       const clientCollection = this.client
         .db('cluster0')
-        .collection<OAuth.Client>('clients');
+        .collection<OAuth.Client>('tokens');
       const client: OAuth.Client = await clientCollection.findOne({
         clientId: clientId,
-        clientSecret: clientSecret,
       });
       if (client === null) {
         throw new Error('No client found');

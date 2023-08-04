@@ -1,6 +1,7 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import OAuth, { Falsey, PasswordModel, Token, Client } from 'oauth2-server';
 import { MongoDBHelper } from '../db/helpers/db.helper';
+import { nextTick } from 'process';
 const authRouter = Router();
 const model: PasswordModel = {
   getAccessToken: async (
@@ -21,6 +22,7 @@ const model: PasswordModel = {
   ): Promise<Client | Falsey> => {
     // logic to retrieve client from database
     try {
+      console.log(clientId, clientSecret);
       const client = await MongoDBHelper.findClient(clientId, clientSecret);
       return client;
     } catch (error) {
@@ -35,7 +37,14 @@ const model: PasswordModel = {
   ): Promise<Token | Falsey> => {
     // logic to save token to database
     try {
-    } catch (error) {}
+      token.clientId = client.clientId;
+      token.user = {
+        username: user.username,
+      };
+      return await MongoDBHelper.saveAccessToken(token);
+    } catch (error) {
+      console.log(error);
+    }
   },
   getUser: async (
     username: string,
@@ -43,17 +52,56 @@ const model: PasswordModel = {
     callback?: OAuth.Callback<OAuth.Token>
   ): Promise<OAuth.User | Falsey> => {
     // logic to retrieve user from database
+    try {
+      const user = await MongoDBHelper.findUser(username);
+      return user;
+    } catch (error) {
+      console.log(error);
+    }
   },
-  verifyScope: async (token: OAuth.Token): Promise<boolean> => {
+  verifyScope: async (token: OAuth.Token, scope: string): Promise<boolean> => {
     // logic to verify scope
+    return true;
   },
 };
 
 const oauth = new OAuth({
   model: model,
+  allowBearerTokensInQueryString: true,
 });
 
-authRouter.use();
+export const authenticateRequest = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const request = new OAuth.Request(req);
+    const response = new OAuth.Response(res);
+    return oauth.authenticate(request, response).then(() => next());
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const obtainToken = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const request = new OAuth.Request(req);
+    const response = new OAuth.Response(res);
+    return oauth
+      .token(request, response)
+      .then((token) => {
+        res.json(token);
+      })
+      .catch((err) => {
+        res.json(err);
+      });
+  } catch (error) {
+    next(error);
+  }
+};
+
+authRouter.use(obtainToken);
 authRouter.get('/login', (req: Request, res: Response) => {});
 
 export default authRouter;
