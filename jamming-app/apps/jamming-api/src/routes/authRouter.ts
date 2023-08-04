@@ -1,9 +1,13 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import OAuth, { Falsey, PasswordModel, Token, Client } from 'oauth2-server';
+import OAuth, {
+  Falsey,
+  Token,
+  Client,
+  ClientCredentialsModel,
+} from 'oauth2-server';
 import { MongoDBHelper } from '../db/helpers/db.helper';
-import { nextTick } from 'process';
 const authRouter = Router();
-const model: PasswordModel = {
+const model: ClientCredentialsModel = {
   getAccessToken: async (
     accessToken: string,
     callback?: OAuth.Callback<OAuth.Token>
@@ -46,19 +50,14 @@ const model: PasswordModel = {
       console.log(error);
     }
   },
-  getUser: async (
-    username: string,
-    password: string,
-    callback?: OAuth.Callback<OAuth.Token>
-  ): Promise<OAuth.User | Falsey> => {
-    // logic to retrieve user from database
+  async getUserFromClient(client: OAuth.Client): Promise<OAuth.User | Falsey> {
     try {
-      const user = await MongoDBHelper.findUser(username);
-      return user;
+      return await MongoDBHelper.findUser(client.clientId);
     } catch (error) {
       console.log(error);
     }
   },
+
   verifyScope: async (token: OAuth.Token, scope: string): Promise<boolean> => {
     // logic to verify scope
     return true;
@@ -86,6 +85,7 @@ export const authenticateRequest = async (
 
 const obtainToken = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    console.log(req.body);
     const request = new OAuth.Request(req);
     const response = new OAuth.Response(res);
     return oauth

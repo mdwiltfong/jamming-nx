@@ -98,6 +98,7 @@ const tokensSchema: CustomCreateCollectionOptions = {
         'userId',
         'expiresAt',
         'clientId',
+        'grants',
       ],
       properties: {
         _id: {
@@ -117,6 +118,10 @@ const tokensSchema: CustomCreateCollectionOptions = {
         clientId: {
           bsonType: 'string',
           description: 'must be a string and is required',
+        },
+        grants: {
+          bsonType: 'array',
+          description: 'must be an array and is required',
         },
         expiresAt: {
           bsonType: 'date',
