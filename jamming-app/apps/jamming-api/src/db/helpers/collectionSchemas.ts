@@ -91,41 +91,26 @@ const tokensSchema: CustomCreateCollectionOptions = {
     $jsonSchema: {
       bsonType: 'object',
       title: 'Token Object Schema',
-      required: [
-        '_id',
-        'accessToken',
-        'refreshToken',
-        'userId',
-        'expiresAt',
-        'clientId',
-        'grants',
-      ],
+      required: ['_id', 'accessToken', 'token_type', 'scope', 'expires_in'],
       properties: {
         _id: {
-          bsonType: 'string',
-        },
-        userId: {
           bsonType: 'string',
         },
         accessToken: {
           bsonType: 'string',
           description: 'must be a string and is required',
         },
-        refreshToken: {
+        token_type: {
           bsonType: 'string',
           description: 'must be a string and is required',
         },
-        clientId: {
+        scope: {
           bsonType: 'string',
           description: 'must be a string and is required',
         },
-        grants: {
-          bsonType: 'array',
-          description: 'must be an array and is required',
-        },
-        expiresAt: {
-          bsonType: 'date',
-          description: 'must be a date and is required',
+        expires_in: {
+          bsonType: 'number',
+          description: 'must be a number and is required',
         },
       },
       additionalProperties: false,
