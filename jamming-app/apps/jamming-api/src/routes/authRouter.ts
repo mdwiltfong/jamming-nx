@@ -1,107 +1,52 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import OAuth, {
-  Falsey,
-  Token,
-  Client,
-  ClientCredentialsModel,
-} from 'oauth2-server';
-import { MongoDBHelper } from '../db/helpers/db.helper';
+import config from '../libs/utils/config';
+import querystring from 'querystring';
+import { request } from 'http';
+import SpotifyHandler from '../libs/utils/SpotifyHandler';
 const authRouter = Router();
-const model: ClientCredentialsModel = {
-  getAccessToken: async (
-    accessToken: string,
-    callback?: OAuth.Callback<OAuth.Token>
-  ): Promise<Token | Falsey> => {
-    // logic to retrieve access token from database
-    try {
-      const token = await MongoDBHelper.findToken(accessToken);
-      return token;
-    } catch (error) {
-      console.log(error);
-    }
-  },
-  getClient: async (
-    clientId: string,
-    clientSecret: string
-  ): Promise<Client | Falsey> => {
-    // logic to retrieve client from database
-    try {
-      console.log(clientId, clientSecret);
-      const client = await MongoDBHelper.findClient(clientId, clientSecret);
-      return client;
-    } catch (error) {
-      console.log(error);
-    }
-  },
-  saveToken: async (
-    token: OAuth.Token,
-    client: OAuth.Client,
-    user: OAuth.User,
-    callback?: OAuth.Callback<OAuth.Token>
-  ): Promise<Token | Falsey> => {
-    // logic to save token to database
-    try {
-      token.clientId = client.clientId;
-      token.user = {
-        username: user.username,
-      };
-      return await MongoDBHelper.saveAccessToken(token);
-    } catch (error) {
-      console.log(error);
-    }
-  },
-  async getUserFromClient(client: OAuth.Client): Promise<OAuth.User | Falsey> {
-    try {
-      return await MongoDBHelper.findUser(client.clientId);
-    } catch (error) {
-      console.log(error);
-    }
-  },
-
-  verifyScope: async (token: OAuth.Token, scope: string): Promise<boolean> => {
-    // logic to verify scope
-    return true;
-  },
-};
-
-const oauth = new OAuth({
-  model: model,
-  allowBearerTokensInQueryString: true,
-});
-
-export const authenticateRequest = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+authRouter.get('/login', (req: Request, res: Response, next: NextFunction) => {
   try {
-    const request = new OAuth.Request(req);
-    const response = new OAuth.Response(res);
-    return oauth.authenticate(request, response).then(() => next());
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-const obtainToken = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    console.log(req.body);
-    const request = new OAuth.Request(req);
-    const response = new OAuth.Response(res);
-    return oauth
-      .token(request, response)
-      .then((token) => {
-        res.json(token);
-      })
-      .catch((err) => {
-        res.json(err);
-      });
+    // TODO: #7 Create a function that will hash the session cookie with a salt. We will also have to verify that the generated state matches the state in the response
+    const state = 'some-random-state';
+    const scope = 'playlist-modify-public user-read-email user-read-private';
+    res.redirect(
+      'https://accounts.spotify.com/authorize?' +
+        querystring.stringify({
+          response_type: 'code',
+          client_id: config.CLIENT_ID,
+          scope: scope,
+          redirect_uri: config.REDIRECT_URI,
+          state: state,
+        })
+    );
   } catch (error) {
     next(error);
   }
-};
+});
 
-authRouter.use(obtainToken);
-authRouter.get('/login', (req: Request, res: Response) => {});
+authRouter.get(
+  '/callback',
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const code = (req.query.code as string) || null;
+      const state = req.query.state || null;
+      const storedState = req.cookies || null;
+      if (state === null) {
+        res.redirect(
+          '/#' +
+            querystring.stringify({
+              error: 'state_mismatch',
+            })
+        );
+      } else {
+        const tokenResponse = await SpotifyHandler.getAccessToken(code);
+        SpotifyHandler.setToken(tokenResponse.data.access_token);
+        res.redirect('/status');
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 export default authRouter;

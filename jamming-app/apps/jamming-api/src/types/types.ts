@@ -6,6 +6,7 @@ export interface axiosOptions {
   url: string;
   headers: {
     'Content-Type': string;
+    Authorization?: string;
   };
   data?: any;
 }

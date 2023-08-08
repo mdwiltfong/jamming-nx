@@ -13,7 +13,7 @@ app.use(morgan('combined'));
 app.get('/status', (req: Request, res: Response) => {
   res.status(200).json({ message: 'Hello World' });
 });
-app.all('/auth', authRouter);
+app.use('/auth', authRouter);
 app.use('/users', validateURL, userRouter);
 app.use('/playlists', validateURL, playlistRouter);
 app.use(ErrorHandler);

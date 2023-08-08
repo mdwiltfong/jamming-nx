@@ -14,6 +14,9 @@ interface ENV {
   SPOTIFY_ACCOUNTS_URL: string;
   SPOTIFY_API_URL: string;
   MONGODB_URI: string;
+  CLIENT_ID: string;
+  REDIRECT_URI: string;
+  CLIENT_SECRET: string;
 }
 
 interface Config extends ENV {}
@@ -26,6 +29,9 @@ const getConfig = (): ENV => {
     SPOTIFY_ACCOUNTS_URL: process.env.SPOTIFY_ACCOUNTS_URL,
     SPOTIFY_API_URL: process.env.SPOTIFY_API_URL,
     MONGODB_URI: process.env.MONGODB_URI,
+    CLIENT_ID: process.env.CLIENT_ID,
+    REDIRECT_URI: process.env.REDIRECT_URI,
+    CLIENT_SECRET: process.env.CLIENT_SECRET,
   };
 };
 
