@@ -1,7 +1,6 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import config from '../libs/utils/config';
 import querystring from 'querystring';
-import { request } from 'http';
 import SpotifyHandler from '../libs/utils/SpotifyHandler';
 const authRouter = Router();
 authRouter.get('/login', (req: Request, res: Response, next: NextFunction) => {
@@ -40,8 +39,11 @@ authRouter.get(
         );
       } else {
         const tokenResponse = await SpotifyHandler.getAccessToken(code);
+
         SpotifyHandler.setToken(tokenResponse.data.access_token);
-        res.redirect('/status');
+        res.redirect(
+          `/status?token=${querystring.stringify(tokenResponse.data)}`
+        );
       }
     } catch (error) {
       next(error);
