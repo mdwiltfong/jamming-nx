@@ -17,6 +17,8 @@ interface ENV {
   CLIENT_ID: string;
   REDIRECT_URI: string;
   CLIENT_SECRET: string;
+  VITE_API_URL: string;
+  SESSION_SECRET: string;
 }
 
 interface Config extends ENV {}
@@ -32,6 +34,8 @@ const getConfig = (): ENV => {
     CLIENT_ID: process.env.CLIENT_ID,
     REDIRECT_URI: process.env.REDIRECT_URI,
     CLIENT_SECRET: process.env.CLIENT_SECRET,
+    SESSION_SECRET: process.env.SESSION_SECRET,
+    VITE_API_URL: process.env.VITE_API_URL,
   };
 };
 

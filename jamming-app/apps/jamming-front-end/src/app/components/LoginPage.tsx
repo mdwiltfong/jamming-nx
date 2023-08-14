@@ -2,14 +2,19 @@ import { Button, Container } from '@mui/material';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import { useFormik } from 'formik';
+import APIHandler, {
+  User,
+  loginCredentials,
+} from '../helper_functions/APIHandler';
 export default function LoginPage() {
   const formik = useFormik({
     initialValues: {
       email: '',
       password: '',
     },
-    onSubmit: (values) => {
-      alert('Login successful');
+    onSubmit: async (values) => {
+      const response = await APIHandler.login<User>(values as loginCredentials);
+      console.log(response);
     },
   });
   return (
