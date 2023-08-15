@@ -13,17 +13,15 @@ import { Strategy } from 'passport-spotify';
 import config from './libs/utils/config';
 import cors from 'cors';
 const app: Express = express();
-app.use(express.json());
 app.use(
   cors({
-    origin: [
-      'http://localhost:4200',
-      'accounts.spotify.com',
-      'api.spotify.com',
-      '*.spotify.com',
-    ],
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true,
   })
 );
+app.use(express.json());
+
 app.use(
   session({
     secret: config.SESSION_SECRET,
