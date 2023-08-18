@@ -2,6 +2,7 @@ import { Container } from '@mui/material';
 import Box from '@mui/material/Box';
 import { LoginButton } from './LoginButton';
 import YouTubeIcon from '@mui/icons-material/YouTube';
+import { LibraryMusic as SpotifyIcon } from '@mui/icons-material';
 export default function LoginPage() {
   return (
     <>
@@ -24,8 +25,9 @@ export default function LoginPage() {
               justifyContent: 'space-between',
             }}
           >
-            <LoginButton title={'Spotify'} />
-            <LoginButton title={'YouTube'} />
+            <LoginButton title={'Spotify'} icon={<YouTubeIcon />} />
+            <YouTubeIcon />
+            <LoginButton title={'YouTube'} icon={<SpotifyIcon />} />
           </Container>
         </Box>
       </Container>
