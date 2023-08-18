@@ -1,22 +1,8 @@
-import { Button, Container } from '@mui/material';
+import { Container } from '@mui/material';
 import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
-import { useFormik } from 'formik';
-import APIHandler, {
-  User,
-  loginCredentials,
-} from '../helper_functions/APIHandler';
+import { LoginButton } from './LoginButton';
+import YouTubeIcon from '@mui/icons-material/YouTube';
 export default function LoginPage() {
-  const formik = useFormik({
-    initialValues: {
-      email: '',
-      password: '',
-    },
-    onSubmit: async (values) => {
-      const response = await APIHandler.login<User>(values as loginCredentials);
-      console.log(response);
-    },
-  });
   return (
     <>
       <Container maxWidth="sm">
@@ -27,36 +13,20 @@ export default function LoginPage() {
             flexDirection: 'column',
             alignItems: 'center',
             border: '1px solid black',
+            borderRadius: '20px',
+            minHeight: '400px',
             p: 1,
           }}
-          onSubmit={formik.handleSubmit}
         >
-          <TextField
-            id="email"
-            name="email"
-            label="Email"
-            type="email"
-            value={formik.values.email}
-            onChange={formik.handleChange}
-            error={formik.touched.email && Boolean(formik.errors.email)}
-            helperText={formik.touched.email && formik.errors.email}
-            required
-          />
-          <TextField
-            id="password"
-            name="password"
-            label="Password"
-            type="password"
-            value={formik.values.password}
-            onChange={formik.handleChange}
-            error={formik.touched.password && Boolean(formik.errors.password)}
-            helperText={formik.touched.password && formik.errors.password}
-            required
-          />
-          <Button type="submit" variant="contained">
-            {' '}
-            Submit{' '}
-          </Button>
+          <Container
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+            }}
+          >
+            <LoginButton title={'Spotify'} />
+            <LoginButton title={'YouTube'} />
+          </Container>
         </Box>
       </Container>
     </>
