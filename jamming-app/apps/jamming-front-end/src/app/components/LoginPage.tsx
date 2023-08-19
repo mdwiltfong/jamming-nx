@@ -22,12 +22,15 @@ export default function LoginPage() {
           <Container
             sx={{
               display: 'flex',
-              justifyContent: 'space-between',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              gap: '16px',
+              width: '300px',
             }}
           >
-            <LoginButton title={'Spotify'} icon={<YouTubeIcon />} />
-            <YouTubeIcon />
-            <LoginButton title={'YouTube'} icon={<SpotifyIcon />} />
+            <h1>Hey! Welcome</h1>
+            <LoginButton title={'YouTube'} icon={<YouTubeIcon />} />
+            <LoginButton title={'Spotify'} icon={<SpotifyIcon />} />
           </Container>
         </Box>
       </Container>
