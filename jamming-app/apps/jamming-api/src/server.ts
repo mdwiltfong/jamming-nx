@@ -12,6 +12,13 @@ import MongoStore from 'connect-mongo';
 import { Strategy } from 'passport-spotify';
 import config from './libs/utils/config';
 import cors from 'cors';
+passport.serializeUser(function (user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function (obj, done) {
+  done(null, obj);
+});
 const app: Express = express();
 app.use(
   cors({

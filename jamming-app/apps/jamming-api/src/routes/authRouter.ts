@@ -19,7 +19,8 @@ authRouter.get(
   passport.authenticate('spotify', { failureRedirect: '/login' }),
   (req: Request, res: Response) => {
     console.log('success');
-    res.redirect(config.EXPRESS_URL_DEV + '4200');
+    console.log(req.session);
+    res.redirect(config.EXPRESS_URL_DEV + '4201');
   }
 );
 
