@@ -12,6 +12,7 @@ import MongoStore from 'connect-mongo';
 import { Strategy } from 'passport-spotify';
 import config from './libs/utils/config';
 import cors from 'cors';
+import MongoDBHelper from './db/helpers/db.helper';
 passport.serializeUser(function (user, done) {
   done(null, user);
 });
@@ -47,8 +48,11 @@ passport.use(
       clientSecret: config.CLIENT_SECRET,
       callbackURL: config.REDIRECT_URI,
     },
-    (accessToken, refreshToken, expires_in, profile, done) => {
-      done(null, profile);
+    async (accessToken, refreshToken, expires_in, profile, done) => {
+      const userProfile = { ...profile, accessToken };
+      MongoDBHelper.findUser(profile.id);
+      console.log(userProfile);
+      done(null, userProfile);
     }
   )
 );
