@@ -20,7 +20,7 @@ authRouter.get(
   (req: Request, res: Response) => {
     console.log('success');
     console.log(req.session);
-    res.redirect(config.EXPRESS_URL_DEV + '4201');
+    res.redirect(config.EXPRESS_URL_DEV + '4200' + '/profile');
   }
 );
 

@@ -49,10 +49,14 @@ passport.use(
       callbackURL: config.REDIRECT_URI,
     },
     async (accessToken, refreshToken, expires_in, profile, done) => {
-      const userProfile = { ...profile, accessToken };
-      MongoDBHelper.findUser(profile.id);
-      console.log(userProfile);
-      done(null, userProfile);
+      try {
+        const userProfile = { ...profile, accessToken };
+        //MongoDBHelper.findUser(profile.id);
+        console.log(userProfile);
+        done(null, userProfile);
+      } catch (error) {
+        done(null, error);
+      }
     }
   )
 );

@@ -8,11 +8,13 @@ import {
 import App from './app/app';
 import NavBar from './app/components/NavBar';
 import LoginPage from './app/components/LoginPage';
+import Profile from './app/components/Profile';
 const router = createBrowserRouter(
   createRoutesFromChildren(
     <Route path="/" element={<NavBar />}>
       <Route path="/" element={<App />} />
       <Route path="login" element={<LoginPage />} />
+      <Route path="profile" element={<Profile />} />
     </Route>
   )
 );
