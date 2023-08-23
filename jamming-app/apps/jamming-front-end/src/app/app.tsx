@@ -7,8 +7,19 @@ import { useEffect, useState } from 'react';
 function App() {
   const [user, setUser] = useState(null);
   useEffect(() => {
-    async function fetchUser() {}
-  });
+    async function fetchUser() {
+      try {
+        const response = await fetch(
+          'http://localhost:4000/auth/current-session'
+        );
+        const json = await response.json();
+        setUser(json);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchUser();
+  }, []);
   return (
     <>
       <Container
