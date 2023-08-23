@@ -6,6 +6,7 @@ import SchemaErrorHandler from './SchemaErrorHandler';
 export const userPayloadSchema: yup.ObjectSchema<IUser<String>> = yup.object({
   _id: yup.string(),
   firstName: yup.string().required(),
+  spotifyID: yup.string().required(),
   lastName: yup.string().required(),
   email: yup.string().email().required(),
   password: yup.string().required(),

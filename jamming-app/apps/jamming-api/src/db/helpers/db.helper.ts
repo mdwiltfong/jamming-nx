@@ -94,15 +94,12 @@ export class MongoDBHelper {
       await this.disconnect();
     }
   }
-  public static async findUser(
-    spotifyID: Condition<String>
-  ): Promise<User | null> {
+  public static async findUser(spotifyID: String): Promise<User | null> {
     try {
       await this.connect();
       const userCollection = this.client
         .db('cluster0')
         .collection<User>('users');
-      //TODO: This query needs to search for SpotifyID, not _id
       const user: User = await userCollection.findOne({
         spotifyID: spotifyID,
       });

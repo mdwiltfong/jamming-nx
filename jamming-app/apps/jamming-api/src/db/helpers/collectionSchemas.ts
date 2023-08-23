@@ -22,6 +22,9 @@ const userValidationSchema: CustomCreateCollectionOptions = {
         _id: {
           bsonType: 'string',
         },
+        spotifyID: {
+          bsonType: 'string',
+        },
         firstName: {
           bsonType: 'string',
           description: 'must be a string and is required',
@@ -54,7 +57,7 @@ const playlistValidationSchema: CustomCreateCollectionOptions = {
         'userId',
         'name',
         'spotifyUserId',
-        'spotifyPlayListId',
+        'spotifyPlaylistId',
         'imageUrl',
       ],
       properties: {
@@ -72,7 +75,7 @@ const playlistValidationSchema: CustomCreateCollectionOptions = {
           bsonType: 'string',
           description: 'must be a string and is required',
         },
-        spotifyPlayListId: {
+        spotifyPlaylistId: {
           bsonType: 'string',
           description: 'must be a string and is required',
         },

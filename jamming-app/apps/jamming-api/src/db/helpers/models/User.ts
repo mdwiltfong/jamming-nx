@@ -1,7 +1,6 @@
-import { ObjectId } from 'mongodb';
-
 export interface IUser<T> {
   _id: T;
+  spotifyID: string;
   firstName: String;
   lastName: String;
   email: String;
@@ -20,6 +19,7 @@ export interface IPlaylist<T> {
 export class User implements IUser<String> {
   constructor(
     public _id: String,
+    public spotifyID: string,
     public firstName: String,
     public lastName: String,
     public email: String,
