@@ -24,4 +24,12 @@ authRouter.get(
   }
 );
 
+authRouter.get(
+  '/current-session',
+  passport.authenticate('spotify', { failureRedirect: '/login' }),
+  (req: Request, res: Response) => {
+    res.status(200).json({ user: req.user });
+  }
+);
+
 export default authRouter;

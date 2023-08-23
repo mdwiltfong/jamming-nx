@@ -2,7 +2,13 @@ import { Container } from '@mui/material';
 import SearchBar from './components/SearchBar';
 import Logo from './components/Logo';
 import Lists from './components/Lists';
+import { useEffect, useState } from 'react';
+
 function App() {
+  const [user, setUser] = useState(null);
+  useEffect(() => {
+    async function fetchUser() {}
+  });
   return (
     <>
       <Container
