@@ -38,6 +38,7 @@ app.use(
     store: MongoStore.create({
       mongoUrl: config.MONGODB_URI,
       collectionName: 'sessions',
+      dbName: 'cluster0',
     }),
   })
 );

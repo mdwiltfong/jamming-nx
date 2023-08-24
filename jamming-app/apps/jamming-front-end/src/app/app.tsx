@@ -3,6 +3,7 @@ import SearchBar from './components/SearchBar';
 import Logo from './components/Logo';
 import Lists from './components/Lists';
 import { useEffect, useState } from 'react';
+import AuthContext from './context/AuthContext';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -22,24 +23,26 @@ function App() {
   }, []);
   return (
     <>
-      <Container
-        maxWidth="xl"
-        disableGutters
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          backgroundRepeat: 'no-repeat',
-          backgroundPosition: '50% 25%',
-          height: '1024px',
-          width: '1024px',
-        }}
-      >
-        <h1>Jamming App</h1>
-        <Logo />
-        <SearchBar />
-        <Lists />
-      </Container>
+      <AuthContext.Provider value={user}>
+        <Container
+          maxWidth="xl"
+          disableGutters
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: '50% 25%',
+            height: '1024px',
+            width: '1024px',
+          }}
+        >
+          <h1>Jamming App</h1>
+          <Logo />
+          <SearchBar />
+          <Lists />
+        </Container>
+      </AuthContext.Provider>
     </>
   );
 }
