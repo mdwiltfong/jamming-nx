@@ -4,17 +4,16 @@ import Logo from './components/Logo';
 import Lists from './components/Lists';
 import { useEffect, useState } from 'react';
 import AuthContext from './context/AuthContext';
+import APIHandler, { User } from './helper_functions/APIHandler';
 
 function App() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null);
   useEffect(() => {
     async function fetchUser() {
       try {
-        const response = await fetch(
-          'http://localhost:4000/auth/current-session'
-        );
-        const json = await response.json();
-        setUser(json);
+        const response = await APIHandler.getCurrentSession();
+        const user = response as User;
+        setUser(user);
       } catch (error) {
         console.error(error);
       }
@@ -23,7 +22,7 @@ function App() {
   }, []);
   return (
     <>
-      <AuthContext.Provider value={user}>
+      <AuthContext.Provider value={user as User}>
         <Container
           maxWidth="xl"
           disableGutters

@@ -11,6 +11,7 @@ export interface axiosOptions {
     Authorization?: string;
   };
   data?: any;
+  withCredentials: boolean;
 }
 
 export interface User {
@@ -42,9 +43,22 @@ export default class APIHandler<T extends User, PlayLists> {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
+        withCredentials: true,
       };
       data ? (axiosOptions['data'] = data) : null;
       const response = (await axios(axiosOptions)) as T;
+      return response;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+  public static async getCurrentSession<User>(): Promise<User> {
+    try {
+      const response = await this.httpRequest<User>(
+        'GET',
+        this.apiURL.href + 'auth/current-session'
+      );
       return response;
     } catch (error) {
       console.error(error);

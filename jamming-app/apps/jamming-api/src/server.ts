@@ -23,7 +23,7 @@ passport.deserializeUser(function (obj, done) {
 const app: Express = express();
 app.use(
   cors({
-    origin: '*',
+    origin: ['*', 'http://localhost:4200'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
   })

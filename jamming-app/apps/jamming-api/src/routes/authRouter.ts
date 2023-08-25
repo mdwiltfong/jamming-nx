@@ -30,8 +30,9 @@ authRouter.get(
   (req: Request, res: Response, next: NextFunction) => {
     if (req.isAuthenticated()) {
       res.status(200).json({ user: req.user });
+    } else {
+      next();
     }
-    res.status(200).json({ user: null });
   }
 );
 
