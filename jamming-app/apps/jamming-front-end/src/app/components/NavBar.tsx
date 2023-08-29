@@ -23,6 +23,8 @@ import { Outlet } from 'react-router-dom';
 const drawerWidth = 240;
 
 import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import APIHandler, { User } from '../helper_functions/APIHandler';
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
   open?: boolean;
@@ -74,6 +76,19 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 export default function PersistentDrawerLeft() {
+  const [user, setUser] = useState<User | null>(null);
+  useEffect(() => {
+    async function fetchUser() {
+      try {
+        const response = await APIHandler.getCurrentSession();
+        const user = response as User;
+        setUser(user);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchUser();
+  }, []);
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
