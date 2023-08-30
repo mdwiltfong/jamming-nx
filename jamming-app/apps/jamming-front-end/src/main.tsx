@@ -9,12 +9,20 @@ import App from './app/app';
 import NavBar from './app/components/NavBar';
 import LoginPage from './app/components/LoginPage';
 import Profile from './app/components/Profile';
+import { ProtectedRoute } from './app/components/ProtectedRoute';
 const router = createBrowserRouter(
   createRoutesFromChildren(
     <Route path="/" element={<NavBar />}>
       <Route path="/" element={<App />} />
       <Route path="login" element={<LoginPage />} />
-      <Route path="profile" element={<Profile />} />
+      <Route
+        path="profile"
+        element={
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        }
+      />
     </Route>
   )
 );

@@ -2,9 +2,6 @@ import { Container } from '@mui/material';
 import SearchBar from './components/SearchBar';
 import Logo from './components/Logo';
 import Lists from './components/Lists';
-import { useEffect, useState } from 'react';
-import AuthContext from './context/AuthContext';
-import APIHandler, { User } from './helper_functions/APIHandler';
 
 function App() {
   return (
