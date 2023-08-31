@@ -161,7 +161,6 @@ export default function PersistentDrawerLeft() {
       </Drawer>
       <Main open={open}>
         <DrawerHeader />
-        <Outlet />
       </Main>
     </Box>
   );

@@ -3,10 +3,12 @@ import {
   createContext,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from 'react';
 import { useNavigate } from 'react-router-dom';
-import APIHandler, { User } from '../../helper_functions/APIHandler';
+import { User } from '../../helper_functions/APIHandler';
+import { useFetchUser } from './useFetchUser';
 interface AuthUserContext {
   user: User | null;
   login?: (user: User) => void;
@@ -19,32 +21,21 @@ const AuthContext = createContext<AuthUserContext>({
 export const AuthProvider: React.FC<PropsWithChildren> = (
   props: PropsWithChildren
 ) => {
-  const [user, setUser] = useState<User | null>(null);
-  useEffect(() => {
-    async function fetchUser() {
-      try {
-        const response = await APIHandler.getCurrentSession();
-        const user = response as User;
-        setUser(user);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-    fetchUser();
-  }, [user]);
+  const { user, setUser } = useFetchUser();
   const navigate = useNavigate();
   const authUserContext = {
-    user,
+    user: user,
     login: (user: User) => {
       setUser(user);
       navigate('/');
     },
     logout: () => {
       setUser(null);
-      navigate('/');
+      navigate('/login');
     },
   };
 
+  console.log(authUserContext);
   return (
     <AuthContext.Provider value={authUserContext}>
       {props.children}

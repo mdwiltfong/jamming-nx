@@ -10,10 +10,11 @@ import NavBar from './app/components/NavBar';
 import LoginPage from './app/components/LoginPage';
 import Profile from './app/components/Profile';
 import { ProtectedRoute } from './app/components/ProtectedRoute';
+import { SearchPage } from './app/components/SearchPage';
 const router = createBrowserRouter(
   createRoutesFromChildren(
-    <Route path="/" element={<NavBar />}>
-      <Route path="/" element={<App />} />
+    <Route path="/" element={<App />}>
+      <Route path="/" element={<SearchPage />} />
       <Route path="login" element={<LoginPage />} />
       <Route
         path="profile"
