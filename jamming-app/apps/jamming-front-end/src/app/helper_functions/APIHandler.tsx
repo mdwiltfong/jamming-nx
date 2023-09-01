@@ -20,21 +20,35 @@ export interface User {
   lastName: string;
   email: string;
 }
-export interface PlayLists {
+export interface PlayList {
   id: string;
   name: string;
   description: string;
 }
 console.log(import.meta.env.VITE_API_URL);
-export default class APIHandler<T extends User, PlayLists> {
+
+interface HTTPResponse {
+  data: UserDataHTTPResponse;
+  status: number;
+  statusText: string;
+  headers: any;
+  config: any;
+  request: any;
+}
+
+interface UserDataHTTPResponse {
+  user: User | null;
+}
+
+export default class APIHandler<T extends User, PlayList> {
   private static token: string = '';
   private static apiURL: URL = new URL(import.meta.env.VITE_API_URL as string);
   constructor() {}
-  private static async httpRequest<T>(
+  private static async httpRequest<HTTPResponse>(
     httpMethod: 'GET' | 'PUT' | 'DELETE' | 'POST',
     endpoint: string,
     data?: any
-  ): Promise<T> {
+  ): Promise<HTTPResponse> {
     try {
       const url = new URL(endpoint, this.apiURL.href);
       const axiosOptions: axiosOptions = {
@@ -46,20 +60,20 @@ export default class APIHandler<T extends User, PlayLists> {
         withCredentials: true,
       };
       data ? (axiosOptions['data'] = data) : null;
-      const response = (await axios(axiosOptions)) as T;
+      const response = (await axios(axiosOptions)) as HTTPResponse;
       return response;
     } catch (error) {
       console.error(error);
       throw error;
     }
   }
-  public static async getCurrentSession<User>(): Promise<User> {
+  public static async getCurrentSession(): Promise<User | null> {
     try {
-      const response = await this.httpRequest<User>(
+      const response = await this.httpRequest<HTTPResponse>(
         'GET',
         this.apiURL.href + 'auth/current-session'
       );
-      return response;
+      return response.data.user as User;
     } catch (error) {
       console.error(error);
       throw error;

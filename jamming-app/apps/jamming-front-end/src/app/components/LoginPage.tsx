@@ -3,7 +3,6 @@ import Box from '@mui/material/Box';
 import { LoginButton } from './LoginButton';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import { LibraryMusic as SpotifyIcon } from '@mui/icons-material';
-import { AuthProvider } from './customHooks/useAuth';
 export default function LoginPage() {
   return (
     <>

@@ -1,8 +1,6 @@
 import { Container } from '@mui/material';
 import { Outlet, useNavigate } from 'react-router-dom';
 import NavBar from './components/NavBar';
-import { useFetchUser } from './components/customHooks/useFetchUser';
-import { AuthProvider } from './components/customHooks/useAuth';
 import { createContext, useEffect, useState } from 'react';
 import APIHandler, { User } from './helper_functions/APIHandler';
 interface AuthUserContext {
@@ -19,7 +17,7 @@ function App() {
       setIsLoading(true);
       try {
         const response = await APIHandler.getCurrentSession();
-        const loggedInUser = response as User;
+        const loggedInUser = response;
         setUser(loggedInUser);
       } catch (error) {
         console.error(error);
@@ -32,7 +30,7 @@ function App() {
   }, [user]);
   const navigate = useNavigate();
   const authUserContext = {
-    user: user,
+    user,
     login: (user: User) => {
       setUser(user);
       navigate('/');

@@ -5,8 +5,8 @@ import { AuthContext } from '../app';
 export const ProtectedRoute: React.FC<PropsWithChildren> = (
   props: PropsWithChildren
 ) => {
-  const { user } = useContext(AuthContext);
-  console.log(user);
-  if (!user) return <Navigate to="/login" />;
+  const authContext = useContext(AuthContext);
+  console.log(authContext);
+  if (authContext.user == null) return <Navigate to="/login" />;
   return <>{props.children}</>;
 };

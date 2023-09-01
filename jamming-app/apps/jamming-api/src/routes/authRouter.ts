@@ -1,7 +1,6 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import config from '../libs/utils/config';
 import passport from 'passport';
-import { nextTick } from 'process';
 const authRouter = Router();
 authRouter.get(
   '/login',
@@ -29,6 +28,7 @@ authRouter.get(
   '/current-session',
   (req: Request, res: Response, next: NextFunction) => {
     if (req.isAuthenticated()) {
+      console.log(req);
       res.status(200).json({ user: req.user });
     } else {
       res.status(200).json({ user: null });

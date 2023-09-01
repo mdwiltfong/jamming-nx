@@ -13,6 +13,7 @@ import { Strategy } from 'passport-spotify';
 import config from './libs/utils/config';
 import cors from 'cors';
 import MongoDBHelper from './db/helpers/db.helper';
+import SpotifyHandler from './libs/utils/SpotifyHandler';
 passport.serializeUser(function (user, done) {
   done(null, user);
 });
@@ -51,10 +52,10 @@ passport.use(
     },
     async (accessToken, refreshToken, expires_in, profile, done) => {
       try {
-        const userProfile = { ...profile, accessToken };
+        SpotifyHandler.setToken(accessToken);
         //MongoDBHelper.findUser(profile.id);
-        console.log(userProfile);
-        done(null, userProfile);
+        console.log(profile);
+        done(null, profile);
       } catch (error) {
         done(null, error);
       }
