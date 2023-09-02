@@ -19,6 +19,10 @@ export interface User {
   firstName: string;
   lastName: string;
   email: string;
+  displayName: string;
+  username: string;
+  profileUrl: string;
+  photos: Array<{ value: string }>;
 }
 export interface PlayList {
   id: string;
