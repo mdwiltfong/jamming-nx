@@ -5,10 +5,14 @@ import { createContext, useEffect, useState } from 'react';
 import APIHandler, { User } from './helper_functions/APIHandler';
 interface AuthUserContext {
   user: User | null;
-  login?: (user: User) => void;
-  logout?: () => void;
+  login: (user: User) => void;
+  logout: () => void;
 }
-export const AuthContext = createContext<AuthUserContext>({ user: null });
+export const AuthContext = createContext<AuthUserContext>({
+  user: null,
+  login: (user: User) => {},
+  logout: () => {},
+});
 function App() {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -35,8 +39,10 @@ function App() {
       setUser(user);
       navigate('/');
     },
-    logout: () => {
+    logout: async () => {
       setUser(null);
+      const response = await APIHandler.logout();
+      console.log(response);
       navigate('/login');
     },
   };

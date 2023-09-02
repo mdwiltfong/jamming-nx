@@ -12,19 +12,22 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
-import { Outlet } from 'react-router-dom';
+import HomeIcon from '@mui/icons-material/Home';
 
 const drawerWidth = 240;
 
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import APIHandler, { User } from '../helper_functions/APIHandler';
+import { NavBarListItem } from './NavBarListItem';
+import {
+  Button,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from '@mui/material';
+import { useAuth } from './customHooks/useAuth';
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
   open?: boolean;
@@ -76,19 +79,9 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 export default function PersistentDrawerLeft() {
-  const [user, setUser] = useState<User | null>(null);
-  useEffect(() => {
-    async function fetchUser() {
-      try {
-        const response = await APIHandler.getCurrentSession();
-        const user = response as User;
-        setUser(user);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-    fetchUser();
-  }, []);
+  const authContext = useAuth();
+  const { user } = authContext;
+  const { logout } = authContext;
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
@@ -100,9 +93,13 @@ export default function PersistentDrawerLeft() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  function handleClick() {
+
+  const handleLogout = () => {
+    logout();
+  };
+  const handleClick = () => {
     navigate('/login');
-  }
+  };
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -146,16 +143,42 @@ export default function PersistentDrawerLeft() {
         </DrawerHeader>
         <Divider />
         <List>
-          {['Home', 'PlayLists', 'Login'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton onClick={handleClick}>
+          {[
+            {
+              text: 'Home',
+              path: '/',
+              icon: HomeIcon,
+            },
+            {
+              text: 'Playlists',
+              path: '/playlists',
+            },
+          ].map((listItem, index) => (
+            <NavBarListItem
+              key={index}
+              path={listItem.path}
+              text={listItem.text}
+            />
+          ))}
+          {user ? (
+            <ListItem key={'Logout'} disablePadding>
+              <ListItemButton onClick={handleLogout}>
                 <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                  <HomeIcon />
                 </ListItemIcon>
-                <ListItemText primary={text} />
+                <ListItemText primary={'LogOut'} />
               </ListItemButton>
             </ListItem>
-          ))}
+          ) : (
+            <ListItem key={'LogIn'} disablePadding>
+              <ListItemButton onClick={handleClick}>
+                <ListItemIcon>
+                  <HomeIcon />
+                </ListItemIcon>
+                <ListItemText primary={'LogIn'} />
+              </ListItemButton>
+            </ListItem>
+          )}
         </List>
         <Divider />
       </Drawer>

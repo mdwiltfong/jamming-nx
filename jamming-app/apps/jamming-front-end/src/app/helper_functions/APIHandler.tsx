@@ -96,6 +96,18 @@ export default class APIHandler<T extends User, PlayList> {
       throw error;
     }
   }
+  public static async logout(): Promise<string> {
+    try {
+      const response = await this.httpRequest<HTTPResponse>(
+        'POST',
+        this.apiURL.href + 'auth/logout'
+      );
+      return response.statusText;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
   public static setToken(token: string): void {
     this.token = token;
   }
