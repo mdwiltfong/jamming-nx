@@ -36,6 +36,9 @@ app.use(
     secret: config.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24,
+    },
     store: MongoStore.create({
       mongoUrl: config.MONGODB_URI,
       collectionName: 'sessions',
