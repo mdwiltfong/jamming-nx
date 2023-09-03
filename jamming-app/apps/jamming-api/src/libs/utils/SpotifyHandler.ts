@@ -15,6 +15,7 @@ export default class SpotifyHandler {
   private static token: string = '';
   private static apiURL: URL = new URL(config.SPOTIFY_API_URL);
   private static accountsURL: URL = new URL(config.SPOTIFY_ACCOUNTS_URL);
+  private static spotifyUserId: string = '';
   constructor() {}
   private static async spotifyAPIRequest(
     httpMethod: 'GET' | 'PUT' | 'DELETE' | 'POST',
@@ -28,15 +29,11 @@ export default class SpotifyHandler {
         url: url.href,
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
-          Authorization:
-            'Basic ' +
-            Buffer.from(config.CLIENT_ID + ':' + config.CLIENT_SECRET).toString(
-              'base64'
-            ),
+          Authorization: 'Bearer ' + this.token,
         },
       };
       data ? (axiosOptions['data'] = data) : null;
-      const response = await axios(axiosOptions);
+      const response = (await axios(axiosOptions)).data;
       return response;
     } catch (error) {
       console.error(error);
@@ -45,11 +42,17 @@ export default class SpotifyHandler {
 
   public static async getPlaylists(): Promise<any> {
     try {
-      const response = await this.spotifyAPIRequest('GET', '/v1/me/playlists');
-      return response;
+      const response = await this.spotifyAPIRequest(
+        'GET',
+        `/v1/users/${this.spotifyUserId}/playlists`
+      );
+      return response.items;
     } catch (error) {
       console.error(error);
     }
+  }
+  public static setSpotifyUserId(id: string): void {
+    this.spotifyUserId = id;
   }
   public static setToken(token: string): void {
     this.token = token;

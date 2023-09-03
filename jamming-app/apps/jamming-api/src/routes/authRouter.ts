@@ -10,6 +10,8 @@ authRouter.get(
       'user-read-private',
       'playlist-modify-public',
       'playlist-modify-private',
+      'playlist-read-private',
+      'playlist-read-collaborative',
     ],
   })
 );

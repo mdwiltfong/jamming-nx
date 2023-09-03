@@ -56,8 +56,9 @@ passport.use(
     async (accessToken, refreshToken, expires_in, profile, done) => {
       try {
         SpotifyHandler.setToken(accessToken);
-        //MongoDBHelper.findUser(profile.id);
-        console.log(profile);
+        SpotifyHandler.setSpotifyUserId(profile.id);
+        const playlists = await SpotifyHandler.getPlaylists();
+        profile['playlists'] = playlists;
         done(null, profile);
       } catch (error) {
         done(null, error);
