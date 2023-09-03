@@ -2,6 +2,7 @@ import { Router, Request, Response, NextFunction } from 'express';
 import { Model } from '../db/helpers/db.helper';
 import { Playlist } from '../db/helpers/models/User';
 import { DocumentNotFoundError } from '../db/helpers/error_handlers/DocumentNotFoundError';
+import SpotifyHandler from '../libs/utils/SpotifyHandler';
 const playlistModel = new Model<Playlist>('playlists');
 const playlistRouter = Router();
 
@@ -25,6 +26,16 @@ playlistRouter.get(
     } catch (error) {
       return next(error);
     }
+  }
+);
+
+playlistRouter.get(
+  '/',
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const playlists = await SpotifyHandler.getPlaylists();
+      return res.status(200).json(playlists);
+    } catch (error) {}
   }
 );
 

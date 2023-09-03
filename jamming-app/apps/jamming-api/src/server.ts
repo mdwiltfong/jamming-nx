@@ -12,8 +12,8 @@ import MongoStore from 'connect-mongo';
 import { Strategy } from 'passport-spotify';
 import config from './libs/utils/config';
 import cors from 'cors';
-import MongoDBHelper from './db/helpers/db.helper';
 import SpotifyHandler from './libs/utils/SpotifyHandler';
+import AuthMiddleWare from './middleware/AuthMiddleWare';
 passport.serializeUser(function (user, done) {
   done(null, user);
 });
@@ -75,7 +75,7 @@ app.get('/status', (req: Request, res: Response) => {
 });
 app.use('/auth', authRouter);
 app.use('/users', validateURL, userRouter);
-app.use('/playlists', validateURL, playlistRouter);
+app.use('/playlists', [validateURL, AuthMiddleWare], playlistRouter);
 app.use(ErrorHandler);
 
 export default app;

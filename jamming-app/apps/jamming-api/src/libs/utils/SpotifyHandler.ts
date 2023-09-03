@@ -43,20 +43,10 @@ export default class SpotifyHandler {
     }
   }
 
-  public static async getAccessToken(
-    authCode: string
-  ): Promise<AccessTokenResponse> {
+  public static async getPlaylists(): Promise<any> {
     try {
-      const body = {
-        code: authCode,
-        redirect_uri: config.REDIRECT_URI,
-        grant_type: 'authorization_code',
-      };
-      return this.spotifyAPIRequest(
-        'POST',
-        'https://accounts.spotify.com/api/token',
-        body
-      );
+      const response = await this.spotifyAPIRequest('GET', '/v1/me/playlists');
+      return response;
     } catch (error) {
       console.error(error);
     }
