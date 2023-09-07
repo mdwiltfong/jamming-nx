@@ -26,17 +26,14 @@ authRouter.get(
   }
 );
 
-authRouter.get(
-  '/current-session',
-  (req: Request, res: Response, next: NextFunction) => {
-    if (req.isAuthenticated()) {
-      console.log(req);
-      res.status(200).json({ user: req.user });
-    } else {
-      res.status(200).json({ user: null });
-    }
+authRouter.get('/current-session', (req: Request, res: Response) => {
+  if (req.isAuthenticated()) {
+    console.log(req);
+    res.status(200).json({ user: req.user });
+  } else {
+    res.status(200).json({ user: null });
   }
-);
+});
 
 authRouter.post(
   '/logout',
