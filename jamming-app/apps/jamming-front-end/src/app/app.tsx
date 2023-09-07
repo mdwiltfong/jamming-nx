@@ -5,13 +5,11 @@ import { createContext, useEffect, useState } from 'react';
 import APIHandler, { PlayList, User } from './helper_functions/APIHandler';
 interface AuthUserContext {
   user: User | null;
-  playlists: PlayList[];
   login: (user: User) => void;
   logout: () => void;
 }
 export const AuthContext = createContext<AuthUserContext>({
   user: null,
-  playlists: [],
   login: (user: User) => {},
   logout: () => {},
 });

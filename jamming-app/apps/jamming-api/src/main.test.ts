@@ -1,9 +1,8 @@
-import { request } from 'http';
 import app from './main';
-import supertest, { Request, Response } from 'supertest';
+import supertest, { Response } from 'supertest';
 import { mockData } from './db/helpers/mockData';
 import MongoDBHelper from './db/helpers/db.helper';
-import { userPayloadSchema } from './schemas/userSchema';
+
 import { validationSchemas } from './db/helpers/collectionSchemas';
 beforeAll(async () => {
   await MongoDBHelper.loadCollection(
@@ -68,6 +67,21 @@ describe('User Router Tests', () => {
 });
 
 describe('Playlist Router Tests', () => {
+  test('Only validated requests can be made to /playlists', async () => {
+    const response: Response = await supertest(app).post('/playlists').send({
+      name: 'Test Playlist',
+      spotifyPlayListId: '123456789',
+      spotifyUserId: '123456789',
+      imageUrl:
+        'https://i.scdn.co/image/ab67706f00000003d0f0e3e0e5e1e0e5e1e0e5e1',
+    });
+    expect(response.status).toBe(400);
+    expect(response.body).toMatchObject({
+      success: false,
+      status: 400,
+      message: 'Invalid request body',
+    });
+  });
   test("GET /playlists/:id returns a playlist's information", async () => {
     const mockPlaylist = mockData.mockPlaylists[0];
     const response: Response = await supertest(app).get(

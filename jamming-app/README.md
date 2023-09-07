@@ -136,6 +136,32 @@ Let me know if you have any other questions!
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
+## Tests
+
+This project has tests for the frontend, backend, as well as the server and it's various helper functions. This is to support development and to make sure that there are no breaking changes being made. In addition, the tests can help confirm that you have properly setup the repo correctly for development.
+
+If you want to test an entire project, you can run:
+
+```
+nx test <project_name>
+```
+
+If you wanted to test a specific file:
+
+```
+nxt test <project_name> --testFile=<test_file_name>
+```
+
+### Jamming-Front-End
+
+- app.spec.tsx
+
+### Jamming-api
+
+- main.test.ts
+- SpotifyHandler.test.ts
+- db.helper.test.ts
+
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
