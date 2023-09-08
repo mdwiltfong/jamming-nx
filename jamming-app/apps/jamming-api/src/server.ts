@@ -1,4 +1,4 @@
-import express, { Express, NextFunction, Request, Response } from 'express';
+import express, { Express, Request, Response } from 'express';
 import morgan from 'morgan';
 import userRouter from './routes/userRouter';
 import { validateURL } from './schemas/userSchema';

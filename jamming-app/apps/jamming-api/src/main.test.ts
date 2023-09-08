@@ -4,6 +4,30 @@ import { mockData } from './db/helpers/mockData';
 import MongoDBHelper from './db/helpers/db.helper';
 
 import { validationSchemas } from './db/helpers/collectionSchemas';
+import passport from 'passport';
+
+jest.mock('passport', () => ({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  authenticate: jest.fn((strategy, options) => {
+    return (req, res, next) => {
+      req.user = { id: 'mockUserId' };
+      next();
+    };
+  }),
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  serializeUser: jest
+    .spyOn(passport, 'serializeUser')
+    .mockImplementation((user, done) => {
+      done(null, user);
+    }),
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  deserializeUser: jest
+    .spyOn(passport, 'deserializeUser')
+    .mockImplementation((id, done) => {
+      done(null, { id });
+    }),
+}));
+
 beforeAll(async () => {
   await MongoDBHelper.loadCollection(
     'users',
