@@ -113,7 +113,7 @@ const mockTokens: Token[] = [
 
 export const mockData: {
   mockUsers: IUser<string>[];
-  mockPlaylists: IPlaylist<String>[];
+  mockPlaylists: IPlaylist<string>[];
   mockTokens: Token[];
 } = {
   mockUsers,

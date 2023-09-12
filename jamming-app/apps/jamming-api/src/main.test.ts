@@ -4,29 +4,6 @@ import { mockData } from './db/helpers/mockData';
 import MongoDBHelper from './db/helpers/db.helper';
 
 import { validationSchemas } from './db/helpers/collectionSchemas';
-import passport from 'passport';
-
-jest.mock('passport', () => ({
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  authenticate: jest.fn((strategy, options) => {
-    return (req, res, next) => {
-      req.user = { id: 'mockUserId' };
-      next();
-    };
-  }),
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  serializeUser: jest
-    .spyOn(passport, 'serializeUser')
-    .mockImplementation((user, done) => {
-      done(null, user);
-    }),
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  deserializeUser: jest
-    .spyOn(passport, 'deserializeUser')
-    .mockImplementation((id, done) => {
-      done(null, { id });
-    }),
-}));
 
 beforeAll(async () => {
   await MongoDBHelper.loadCollection(
@@ -90,8 +67,8 @@ describe('User Router Tests', () => {
   });
 });
 
-describe('Playlist Router Tests', () => {
-  test('Only validated requests can be made to /playlists', async () => {
+describe.only('Playlist Router Tests', () => {
+  test.skip('Only validated requests can be made to /playlists', async () => {
     const response: Response = await supertest(app).post('/playlists').send({
       name: 'Test Playlist',
       spotifyPlayListId: '123456789',

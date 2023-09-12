@@ -14,7 +14,7 @@ import config from './libs/utils/config';
 import cors from 'cors';
 import SpotifyHandler from './libs/utils/SpotifyHandler';
 import AuthMiddleWare from './middleware/AuthMiddleWare';
-import mockStrategy from './mocks/mockStrategy';
+import MockStrategy from './mocks/mockStrategy';
 passport.serializeUser(function (user, done) {
   done(null, user);
 });
@@ -48,8 +48,11 @@ app.use(
   })
 );
 
-function determineStrategy() {
-  if (process.env.NODE_ENV === 'production') {
+function determineStrategy(): Strategy {
+  if (
+    process.env.NODE_ENV === 'production' ||
+    process.env.NODE_ENV === 'development'
+  ) {
     return new Strategy(
       {
         clientID: config.CLIENT_ID,
@@ -69,34 +72,18 @@ function determineStrategy() {
       }
     );
   } else {
-    return new mockStrategy(
+    console.log('Mock Strategy');
+    return new MockStrategy(
       'spotify',
       (accessToken, refreshToken, expires_in, profile, done) => {
+        console.log('Mock Strategy Callback');
+        console.log(profile);
         done(null, profile);
       }
     );
   }
 }
-passport.use(
-  new Strategy(
-    {
-      clientID: config.CLIENT_ID,
-      clientSecret: config.CLIENT_SECRET,
-      callbackURL: config.REDIRECT_URI,
-    },
-    async (accessToken, refreshToken, expires_in, profile, done) => {
-      try {
-        SpotifyHandler.setToken(accessToken);
-        SpotifyHandler.setSpotifyUserId(profile.id);
-        const playlists = await SpotifyHandler.getPlaylists();
-        profile['playlists'] = playlists;
-        done(null, profile);
-      } catch (error) {
-        done(null, error);
-      }
-    }
-  )
-);
+passport.use(determineStrategy());
 app.use(passport.initialize());
 app.use(passport.session());
 

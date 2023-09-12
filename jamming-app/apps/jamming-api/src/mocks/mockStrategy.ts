@@ -1,5 +1,7 @@
-import { Strategy } from 'passport-strategy';
-
+import passport from 'passport-strategy';
+import mockUser from './mockUser';
+import { profile } from 'console';
+import util from 'util';
 type strategyCallBack = (
   accessToken,
   refreshToken,
@@ -8,17 +10,27 @@ type strategyCallBack = (
   done
 ) => void;
 
-export default class mockStrategy extends Strategy {
-  private name: string;
-  private callBackStrategy: strategyCallBack;
-  private mockUser;
-  constructor(name: string, callBackStrategy: strategyCallBack) {
+class Strategy extends passport.Strategy {
+  public name;
+  private _user;
+  private _cb: strategyCallBack;
+  constructor(name, strategyCallback) {
+    if (!name || name.length === 0) {
+      throw new TypeError('DevStrategy requires a Strategy name');
+    }
     super();
+
     this.name = name;
-    this.callBackStrategy = callBackStrategy;
+    this._user = mockUser;
+    this._cb = strategyCallback;
   }
 
-  public authenticate(): void {
-    this.callBackStrategy(null, null, this.mockUser, null, null);
+  authenticate() {
+    console.log('Mock Authenticate');
+    this._cb(null, null, null, this._user, (error, user) => {
+      this.success(user);
+    });
   }
 }
+
+export default Strategy;
