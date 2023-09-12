@@ -75,10 +75,14 @@ function determineStrategy(): Strategy {
     console.log('Mock Strategy');
     return new MockStrategy(
       'spotify',
-      (accessToken, refreshToken, expires_in, profile, done) => {
-        console.log('Mock Strategy Callback');
-        console.log(profile);
-        done(null, profile);
+      async (accessToken, refreshToken, expires_in, profile, done) => {
+        try {
+          console.log('Mock Strategy Callback');
+          console.log(profile);
+          done(null, profile);
+        } catch (error) {
+          done(null, error);
+        }
       }
     );
   }

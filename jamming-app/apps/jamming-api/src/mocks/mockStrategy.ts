@@ -28,6 +28,7 @@ class Strategy extends passport.Strategy {
   authenticate() {
     console.log('Mock Authenticate');
     this._cb(null, null, null, this._user, (error, user) => {
+      console.log(error);
       this.success(user);
     });
   }
