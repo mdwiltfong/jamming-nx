@@ -16,12 +16,10 @@ import SpotifyHandler from './libs/utils/SpotifyHandler';
 import AuthMiddleWare from './middleware/AuthMiddleWare';
 import MockStrategy from './mocks/mockStrategy';
 passport.serializeUser(function (user, done) {
-  console.log('serialize');
   done(null, user);
 });
 
 passport.deserializeUser(function (obj, done) {
-  console.log('deserialize --egg');
   done(null, obj);
 });
 const app: Express = express();

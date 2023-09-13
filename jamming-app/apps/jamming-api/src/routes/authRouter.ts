@@ -13,7 +13,11 @@ authRouter.get(
       'playlist-read-private',
       'playlist-read-collaborative',
     ],
-  })
+  }),
+  (req: Request, res: Response) => {
+    console.log('login');
+    res.redirect('/auth/current-session');
+  }
 );
 
 authRouter.get(
@@ -27,7 +31,7 @@ authRouter.get(
 
 authRouter.get('/current-session', (req: Request, res: Response) => {
   console.log('current session');
-  console.log(req.session)
+  console.log(req.session);
   if (req.isAuthenticated()) {
     res.status(200).json({ user: req.user });
   } else {
