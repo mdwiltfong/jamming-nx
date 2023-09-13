@@ -16,10 +16,12 @@ import SpotifyHandler from './libs/utils/SpotifyHandler';
 import AuthMiddleWare from './middleware/AuthMiddleWare';
 import MockStrategy from './mocks/mockStrategy';
 passport.serializeUser(function (user, done) {
+  console.log('serialize');
   done(null, user);
 });
 
 passport.deserializeUser(function (obj, done) {
+  console.log('deserialize --egg');
   done(null, obj);
 });
 const app: Express = express();
@@ -36,7 +38,7 @@ app.use(
   session({
     secret: config.SESSION_SECRET,
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
     cookie: {
       maxAge: 1000 * 60 * 60 * 24,
     },
@@ -77,8 +79,6 @@ function determineStrategy(): Strategy {
       'spotify',
       async (accessToken, refreshToken, expires_in, profile, done) => {
         try {
-          console.log('Mock Strategy Callback');
-          console.log(profile);
           done(null, profile);
         } catch (error) {
           done(null, error);

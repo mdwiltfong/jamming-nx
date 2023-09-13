@@ -21,14 +21,14 @@ authRouter.get(
   passport.authenticate('spotify', { failureRedirect: '/login' }),
   (req: Request, res: Response) => {
     console.log('success');
-    console.log(req.session);
     res.redirect(config.EXPRESS_URL_DEV + '4200' + '/profile');
   }
 );
 
 authRouter.get('/current-session', (req: Request, res: Response) => {
+  console.log('current session');
+  console.log(req.session)
   if (req.isAuthenticated()) {
-    console.log(req);
     res.status(200).json({ user: req.user });
   } else {
     res.status(200).json({ user: null });

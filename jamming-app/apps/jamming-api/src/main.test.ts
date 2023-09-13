@@ -83,17 +83,19 @@ describe.only('Playlist Router Tests', () => {
       message: 'Invalid request body',
     });
   });
-  test("GET /playlists/:id returns a playlist's information", async () => {
+  test.only("GET /playlists/:id returns a playlist's information", async () => {
     const mockPlaylist = mockData.mockPlaylists[0];
-    const response: Response = await supertest(app).get(
-      `/playlists/${mockPlaylist._id}`
-    );
+    const loggedInStatus = await supertest(app).get('/auth/login');
+    console.log(loggedInStatus.headers['set-cookie']);
+    const response: Response = await supertest(app)
+      .get(`/playlists/${mockPlaylist._id}`)
+      .set('Cookie', loggedInStatus.headers['set-cookie']);
     expect(response.status).toBe(200);
     expect(response.body).toMatchObject({
       _id: expect.any(String),
       userId: expect.any(String),
       name: expect.any(String),
-      spotifyPlayListId: expect.any(String),
+      spotifyPlaylistId: expect.any(String),
       spotifyUserId: expect.any(String),
       imageUrl: expect.any(String),
     });
