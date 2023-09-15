@@ -16,6 +16,10 @@ beforeAll(async () => {
     validationSchemas.playlistValidationSchema,
     mockData.mockPlaylists
   );
+  await MongoDBHelper.loadCollection(
+    'sessions',
+    validationSchemas.sessionSchema
+  );
 });
 describe('Server Tests', () => {
   test('Server is running', async () => {
@@ -83,6 +87,7 @@ describe.only('Playlist Router Tests', () => {
       message: 'Invalid request body',
     });
   });
+
   test.only("GET /playlists/:id returns a playlist's information", async () => {
     const mockPlaylist = mockData.mockPlaylists[0];
     const loggedInStatus = await supertest(app).get('/auth/login');

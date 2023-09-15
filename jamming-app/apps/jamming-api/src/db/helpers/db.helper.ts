@@ -58,7 +58,7 @@ export class MongoDBHelper {
   public static async loadCollection(
     collectionName: string,
     collectionSchema: CreateCollectionOptions,
-    mockData: any
+    mockData?: any
   ) {
     try {
       await this.connect();
