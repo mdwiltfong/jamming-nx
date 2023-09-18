@@ -93,30 +93,38 @@ const mockPlaylists: IPlaylist<string>[] = [
   },
 ];
 
-interface Token {
+interface ISession {
   _id: string;
-  accessToken: string;
-  token_type: string;
-  scope: string;
-  expires_in: number;
+  expires: Date;
+  session: string;
 }
 
-const mockTokens: Token[] = [
+const mockSessions: ISession[] = [
   {
-    _id: 'd06e047a-0290-405b-bf39-a42c3bbff280',
-    accessToken: uuidv4(),
-    token_type: 'Bearer',
-    scope: 'playlist-modify-public',
-    expires_in: 60000, // Expires in 1 hour
+    _id: '699962cb-0789-4cd2-8f08-404131141649',
+    expires: new Date('2021-06-30T13:00:00.000Z'),
+    session: JSON.stringify({
+      cookie: {
+        originalMaxAge: 3600000,
+        expires: '2021-06-30T13:00:00.000Z',
+        secure: false,
+        httpOnly: true,
+        path: '/',
+        sameSite: 'lax',
+      },
+      passport: {
+        user: mockUsers[0]._id,
+      },
+    }),
   },
 ];
 
 export const mockData: {
   mockUsers: IUser<string>[];
   mockPlaylists: IPlaylist<string>[];
-  mockTokens: Token[];
+  mockSessions: ISession[];
 } = {
   mockUsers,
   mockPlaylists,
-  mockTokens,
+  mockSessions,
 };
