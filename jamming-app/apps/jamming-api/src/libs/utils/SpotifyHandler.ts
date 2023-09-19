@@ -22,6 +22,9 @@ export default class SpotifyHandler {
     data?: any
   ): Promise<any> {
     try {
+      if (this.token === '' || this.spotifyUserId === '') {
+        throw new Error('No token or user ID set');
+      }
       const url = new URL(endpoint, this.apiURL.href);
       const axiosOptions: axiosOptions = {
         method: httpMethod,
