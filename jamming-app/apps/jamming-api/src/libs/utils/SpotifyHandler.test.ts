@@ -1,7 +1,9 @@
 import SpotifyHandler from './SpotifyHandler';
-import axios from 'axios';
+import axios, { AxiosStatic } from 'axios';
 
 jest.mock('axios');
+
+const mockedAxios = axios as jest.Mocked<AxiosStatic> & jest.Mock;
 
 describe('SpotifyHandler Tests', () => {
   describe('getPlaylists', () => {
@@ -14,9 +16,8 @@ describe('SpotifyHandler Tests', () => {
           ],
         },
       };
-      (axios.get as jest.MockedFunction<typeof axios.get>).mockResolvedValue(
-        mockResponse
-      );
+      mockedAxios.mockResolvedValue(mockResponse);
+
       // TODO: The access token and user ID needs to be mocked, and set in this class before it can make an API request to Spotify.
       SpotifyHandler.setToken('testToken');
       SpotifyHandler.setSpotifyUserId('testUserId');
