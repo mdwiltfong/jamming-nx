@@ -89,31 +89,23 @@ const playlistValidationSchema: CustomCreateCollectionOptions = {
   },
 };
 
-const tokensSchema: CustomCreateCollectionOptions = {
+const sessionSchema: CustomCreateCollectionOptions = {
   validator: {
     $jsonSchema: {
       bsonType: 'object',
-      title: 'Token Object Schema',
-      required: ['_id', 'accessToken', 'token_type', 'scope', 'expires_in'],
+      title: 'Session Object Schema',
+      required: ['_id', 'expires', 'session'],
       properties: {
         _id: {
           bsonType: 'string',
         },
-        accessToken: {
-          bsonType: 'string',
+        expires: {
+          bsonType: 'date',
           description: 'must be a string and is required',
         },
-        token_type: {
+        session: {
           bsonType: 'string',
-          description: 'must be a string and is required',
-        },
-        scope: {
-          bsonType: 'string',
-          description: 'must be a string and is required',
-        },
-        expires_in: {
-          bsonType: 'number',
-          description: 'must be a number and is required',
+          description: 'session data in the form of a JSON string',
         },
       },
       additionalProperties: false,
@@ -124,9 +116,9 @@ const tokensSchema: CustomCreateCollectionOptions = {
 export const validationSchemas: {
   userValidationSchema: CustomCreateCollectionOptions;
   playlistValidationSchema: CustomCreateCollectionOptions;
-  tokensValidationSchema: CustomCreateCollectionOptions;
+  sessionSchema: CustomCreateCollectionOptions;
 } = {
   userValidationSchema: userValidationSchema,
   playlistValidationSchema: playlistValidationSchema,
-  tokensValidationSchema: tokensSchema,
+  sessionSchema: sessionSchema,
 };

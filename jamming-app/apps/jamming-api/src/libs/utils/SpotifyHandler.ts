@@ -12,17 +12,19 @@ interface AccessTokenResponse {
 }
 
 export default class SpotifyHandler {
-  private static token: string = '';
+  private static token = '';
   private static apiURL: URL = new URL(config.SPOTIFY_API_URL);
   private static accountsURL: URL = new URL(config.SPOTIFY_ACCOUNTS_URL);
-  private static spotifyUserId: string = '';
-  constructor() {}
+  private static spotifyUserId = '';
   private static async spotifyAPIRequest(
     httpMethod: 'GET' | 'PUT' | 'DELETE' | 'POST',
     endpoint: string,
     data?: any
   ): Promise<any> {
     try {
+      if (this.token === '' || this.spotifyUserId === '') {
+        throw new Error('No token or user ID set');
+      }
       const url = new URL(endpoint, this.apiURL.href);
       const axiosOptions: axiosOptions = {
         method: httpMethod,
@@ -33,8 +35,8 @@ export default class SpotifyHandler {
         },
       };
       data ? (axiosOptions['data'] = data) : null;
-      const response = (await axios(axiosOptions)).data;
-      return response;
+      const response = await axios(axiosOptions);
+      return response.data;
     } catch (error) {
       console.error(error);
     }

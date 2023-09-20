@@ -14,6 +14,7 @@ import config from './libs/utils/config';
 import cors from 'cors';
 import SpotifyHandler from './libs/utils/SpotifyHandler';
 import AuthMiddleWare from './middleware/AuthMiddleWare';
+import MockStrategy from './mocks/mockStrategy';
 passport.serializeUser(function (user, done) {
   done(null, user);
 });
@@ -35,7 +36,7 @@ app.use(
   session({
     secret: config.SESSION_SECRET,
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
     cookie: {
       maxAge: 1000 * 60 * 60 * 24,
     },
@@ -46,26 +47,45 @@ app.use(
     }),
   })
 );
-passport.use(
-  new Strategy(
-    {
-      clientID: config.CLIENT_ID,
-      clientSecret: config.CLIENT_SECRET,
-      callbackURL: config.REDIRECT_URI,
-    },
-    async (accessToken, refreshToken, expires_in, profile, done) => {
-      try {
-        SpotifyHandler.setToken(accessToken);
-        SpotifyHandler.setSpotifyUserId(profile.id);
-        const playlists = await SpotifyHandler.getPlaylists();
-        profile['playlists'] = playlists;
-        done(null, profile);
-      } catch (error) {
-        done(null, error);
+
+function determineStrategy(): Strategy {
+  if (
+    process.env.NODE_ENV === 'production' ||
+    process.env.NODE_ENV === 'development'
+  ) {
+    return new Strategy(
+      {
+        clientID: config.CLIENT_ID,
+        clientSecret: config.CLIENT_SECRET,
+        callbackURL: config.REDIRECT_URI,
+      },
+      async (accessToken, refreshToken, expires_in, profile, done) => {
+        try {
+          SpotifyHandler.setToken(accessToken);
+          SpotifyHandler.setSpotifyUserId(profile.id);
+          const playlists = await SpotifyHandler.getPlaylists();
+          profile['playlists'] = playlists;
+          done(null, profile);
+        } catch (error) {
+          done(null, error);
+        }
       }
-    }
-  )
-);
+    );
+  } else {
+    console.log('Mock Strategy');
+    return new MockStrategy(
+      'spotify',
+      async (accessToken, refreshToken, expires_in, profile, done) => {
+        try {
+          done(null, profile);
+        } catch (error) {
+          done(null, error);
+        }
+      }
+    );
+  }
+}
+passport.use(determineStrategy());
 app.use(passport.initialize());
 app.use(passport.session());
 

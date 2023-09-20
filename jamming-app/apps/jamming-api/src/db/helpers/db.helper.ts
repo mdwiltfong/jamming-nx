@@ -1,7 +1,6 @@
 import {
   Collection,
   CollectionInfo,
-  Condition,
   CreateCollectionOptions,
   Filter,
   MongoClient,
@@ -15,7 +14,7 @@ import BaseError from '../errorHandlers/BaseError';
 import OAuth from 'oauth2-server';
 export class MongoDBHelper {
   private static connectionString: string = config.MONGODB_URI;
-  private static cluster: string = 'cluster0';
+  private static cluster = 'cluster0';
   private static client: MongoClient = this.generateMongoClient();
   private static generateMongoClient(): MongoClient {
     const db = new MongoClient(this.connectionString, {
@@ -55,13 +54,27 @@ export class MongoDBHelper {
       throw new MongoDBErrorHandler(error);
     }
   }
+  public static async clearCollection(collectionName: string) {
+    try {
+      await this.connect();
+      const dbClient = this.client.db(this.cluster);
+      const collection = dbClient.collection(collectionName);
+      const result = await collection.deleteMany({});
+      console.log(result);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      await this.disconnect();
+    }
+  }
   public static async loadCollection(
     collectionName: string,
     collectionSchema: CreateCollectionOptions,
-    mockData: any
+    mockData?: any
   ) {
     try {
       await this.connect();
+
       const dbClient = this.client.db(this.cluster);
 
       const usrCollection = (await dbClient.listCollections().toArray()).filter(
@@ -87,14 +100,14 @@ export class MongoDBHelper {
       insertionResult.insertedIds;
     } catch (error) {
       console.log(
-        `There was an issue loading the \"${collectionName}\" collection`
+        `There was an issue loading the "${collectionName}" collection`
       );
       throw new MongoDBErrorHandler(error);
     } finally {
       await this.disconnect();
     }
   }
-  public static async findUser(spotifyID: String): Promise<User | null> {
+  public static async findUser(spotifyID: string): Promise<User | null> {
     try {
       await this.connect();
       const userCollection = this.client
@@ -153,7 +166,7 @@ export class MongoDBHelper {
       await this.disconnect();
     }
   }
-  public static async findClient(clientId: string, clientSecret?: string) {
+  public static async findClient(clientId: string) {
     try {
       await this.connect();
       const clientCollection = this.client
@@ -264,6 +277,7 @@ export class Model<T extends User | Playlist> {
       console.log(document);
       return document.value as User;
     } catch (error) {
+      console.log(error);
     } finally {
       await this.dbClient.close();
     }
