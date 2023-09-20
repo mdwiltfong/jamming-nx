@@ -22,6 +22,9 @@ const userValidationSchema: CustomCreateCollectionOptions = {
         _id: {
           bsonType: 'string',
         },
+        spotifyID: {
+          bsonType: 'string',
+        },
         firstName: {
           bsonType: 'string',
           description: 'must be a string and is required',
@@ -54,7 +57,7 @@ const playlistValidationSchema: CustomCreateCollectionOptions = {
         'userId',
         'name',
         'spotifyUserId',
-        'spotifyPlayListId',
+        'spotifyPlaylistId',
         'imageUrl',
       ],
       properties: {
@@ -72,7 +75,7 @@ const playlistValidationSchema: CustomCreateCollectionOptions = {
           bsonType: 'string',
           description: 'must be a string and is required',
         },
-        spotifyPlayListId: {
+        spotifyPlaylistId: {
           bsonType: 'string',
           description: 'must be a string and is required',
         },
@@ -86,7 +89,36 @@ const playlistValidationSchema: CustomCreateCollectionOptions = {
   },
 };
 
-export const validationSchemas = {
+const sessionSchema: CustomCreateCollectionOptions = {
+  validator: {
+    $jsonSchema: {
+      bsonType: 'object',
+      title: 'Session Object Schema',
+      required: ['_id', 'expires', 'session'],
+      properties: {
+        _id: {
+          bsonType: 'string',
+        },
+        expires: {
+          bsonType: 'date',
+          description: 'must be a string and is required',
+        },
+        session: {
+          bsonType: 'string',
+          description: 'session data in the form of a JSON string',
+        },
+      },
+      additionalProperties: false,
+    },
+  },
+};
+
+export const validationSchemas: {
+  userValidationSchema: CustomCreateCollectionOptions;
+  playlistValidationSchema: CustomCreateCollectionOptions;
+  sessionSchema: CustomCreateCollectionOptions;
+} = {
   userValidationSchema: userValidationSchema,
   playlistValidationSchema: playlistValidationSchema,
+  sessionSchema: sessionSchema,
 };

@@ -1,23 +1,20 @@
 import {
   Collection,
   CollectionInfo,
-  Condition,
   CreateCollectionOptions,
   Filter,
   MongoClient,
-  ObjectId,
   ServerApiVersion,
-  WithId,
 } from 'mongodb';
 import config from '../../libs/utils/config';
 import color from 'colors';
 import { Playlist, User } from './models/User';
 import MongoDBErrorHandler from '../errorHandlers/MongoDBErrorHandler';
 import BaseError from '../errorHandlers/BaseError';
-import { DocumentNotFoundError } from './error_handlers/DocumentNotFoundError';
-class MongoDBHelper {
+import OAuth from 'oauth2-server';
+export class MongoDBHelper {
   private static connectionString: string = config.MONGODB_URI;
-  private static cluster: string = 'cluster0';
+  private static cluster = 'cluster0';
   private static client: MongoClient = this.generateMongoClient();
   private static generateMongoClient(): MongoClient {
     const db = new MongoClient(this.connectionString, {
@@ -57,13 +54,27 @@ class MongoDBHelper {
       throw new MongoDBErrorHandler(error);
     }
   }
+  public static async clearCollection(collectionName: string) {
+    try {
+      await this.connect();
+      const dbClient = this.client.db(this.cluster);
+      const collection = dbClient.collection(collectionName);
+      const result = await collection.deleteMany({});
+      console.log(result);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      await this.disconnect();
+    }
+  }
   public static async loadCollection(
     collectionName: string,
     collectionSchema: CreateCollectionOptions,
-    mockData: any
+    mockData?: any
   ) {
     try {
       await this.connect();
+
       const dbClient = this.client.db(this.cluster);
 
       const usrCollection = (await dbClient.listCollections().toArray()).filter(
@@ -89,22 +100,22 @@ class MongoDBHelper {
       insertionResult.insertedIds;
     } catch (error) {
       console.log(
-        `There was an issue loading the \"${collectionName}\" collection`
+        `There was an issue loading the "${collectionName}" collection`
       );
       throw new MongoDBErrorHandler(error);
     } finally {
       await this.disconnect();
     }
   }
-  public static async findUser(
-    userId: Condition<String>
-  ): Promise<User | null> {
+  public static async findUser(spotifyID: string): Promise<User | null> {
     try {
       await this.connect();
       const userCollection = this.client
         .db('cluster0')
         .collection<User>('users');
-      const user: User = await userCollection.findOne(userId);
+      const user: User = await userCollection.findOne({
+        spotifyID: spotifyID,
+      });
       if (user === null) {
         throw new Error('No user found');
       }
@@ -135,6 +146,63 @@ class MongoDBHelper {
 
   public static getClient(): MongoClient {
     return this.client;
+  }
+  public static async findToken(token: string) {
+    try {
+      await this.connect();
+      const tokenCollection = this.client
+        .db('cluster0')
+        .collection<OAuth.Token>('tokens');
+      const tkn: OAuth.Token = await tokenCollection.findOne({
+        accessToken: token,
+      });
+      if (tkn === null) {
+        throw new Error('No token found');
+      }
+      return tkn;
+    } catch (error) {
+      throw new MongoDBErrorHandler(error);
+    } finally {
+      await this.disconnect();
+    }
+  }
+  public static async findClient(clientId: string) {
+    try {
+      await this.connect();
+      const clientCollection = this.client
+        .db('cluster0')
+        .collection<OAuth.Client>('tokens');
+      const client: OAuth.Client = await clientCollection.findOne({
+        clientId: clientId,
+      });
+      if (client === null) {
+        throw new Error('No client found');
+      }
+      return client;
+    } catch (error) {
+      throw new MongoDBErrorHandler(error);
+    } finally {
+      await this.disconnect();
+    }
+  }
+  public static async saveAccessToken(
+    accessToken: OAuth.Token
+  ): Promise<OAuth.Token> {
+    try {
+      await this.connect();
+      const tokenCollection = this.client
+        .db('cluster0')
+        .collection<OAuth.Token>('tokens');
+      const result = await tokenCollection.insertOne(accessToken);
+      if (result.insertedId === null) {
+        throw new Error('Failed to insert token');
+      }
+      return accessToken;
+    } catch (error) {
+      throw new MongoDBErrorHandler(error);
+    } finally {
+      await this.disconnect();
+    }
   }
 }
 
@@ -209,6 +277,7 @@ export class Model<T extends User | Playlist> {
       console.log(document);
       return document.value as User;
     } catch (error) {
+      console.log(error);
     } finally {
       await this.dbClient.close();
     }

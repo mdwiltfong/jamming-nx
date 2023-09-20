@@ -1,10 +1,10 @@
-import { request } from 'http';
 import app from './main';
-import supertest, { Request, Response } from 'supertest';
+import supertest, { Response } from 'supertest';
 import { mockData } from './db/helpers/mockData';
 import MongoDBHelper from './db/helpers/db.helper';
-import { userPayloadSchema } from './schemas/userSchema';
+
 import { validationSchemas } from './db/helpers/collectionSchemas';
+
 beforeAll(async () => {
   await MongoDBHelper.loadCollection(
     'users',
@@ -16,6 +16,7 @@ beforeAll(async () => {
     validationSchemas.playlistValidationSchema,
     mockData.mockPlaylists
   );
+  await MongoDBHelper.clearCollection('sessions');
 });
 describe('Server Tests', () => {
   test('Server is running', async () => {
@@ -28,12 +29,18 @@ describe('Server Tests', () => {
 });
 
 describe('User Router Tests', () => {
+  let sessionCookie = '';
+  beforeEach(async () => {
+    await MongoDBHelper.clearCollection('sessions');
+    const response: Response = await supertest(app).get('/auth/login');
+    sessionCookie = response.headers['set-cookie'];
+  });
   test("GET /users/:id returns a user's information", async () => {
     const mockUser = mockData.mockUsers[0];
     console.log(mockUser);
-    const response: Response = await supertest(app).get(
-      `/users/${mockData.mockUsers[0]._id}`
-    );
+    const response: Response = await supertest(app)
+      .get(`/users/${mockData.mockUsers[0]._id}`)
+      .set('Cookie', sessionCookie);
     expect(response.status).toBe(200);
     expect(response.body).toMatchObject({
       _id: expect.any(String),
@@ -44,9 +51,9 @@ describe('User Router Tests', () => {
     });
   });
   test("GET /users/:id returns a 404 if the user doesn't exist", async () => {
-    const response: Response = await supertest(app).get(
-      '/users/269ae06f-fb32-4935-85e1-3df76e42d92a'
-    );
+    const response: Response = await supertest(app)
+      .get('/users/269ae06f-fb32-4935-85e1-3df76e42d92a')
+      .set('Cookie', sessionCookie);
     expect(response.status).toBe(404);
     expect(response.body).toMatchObject({
       success: false,
@@ -55,9 +62,9 @@ describe('User Router Tests', () => {
     });
   });
   test('GET /users/:id returns a 400 if the user ID is not a valid UUID', async () => {
-    const response: Response = await supertest(app).get(
-      '/users/not-a-valid-uuid'
-    );
+    const response: Response = await supertest(app)
+      .get('/users/not-a-valid-uuid')
+      .set('Cookie', sessionCookie);
     expect(response.status).toBe(400);
     expect(response.body).toMatchObject({
       success: false,
@@ -68,25 +75,48 @@ describe('User Router Tests', () => {
 });
 
 describe('Playlist Router Tests', () => {
+  let sessionCookie = '';
+  beforeEach(async () => {
+    await MongoDBHelper.clearCollection('sessions');
+    const response: Response = await supertest(app).get('/auth/login');
+    sessionCookie = response.headers['set-cookie'];
+  });
+
+  test('Only validated requests can be made to /playlists', async () => {
+    const response: Response = await supertest(app).post('/playlists').send({
+      name: 'Test Playlist',
+      spotifyPlayListId: '123456789',
+      spotifyUserId: '123456789',
+      imageUrl:
+        'https://i.scdn.co/image/ab67706f00000003d0f0e3e0e5e1e0e5e1e0e5e1',
+    });
+    expect(response.status).toBe(400);
+    expect(response.body).toMatchObject({
+      success: false,
+      status: 400,
+      message: 'Invalid URL format',
+    });
+  });
+
   test("GET /playlists/:id returns a playlist's information", async () => {
     const mockPlaylist = mockData.mockPlaylists[0];
-    const response: Response = await supertest(app).get(
-      `/playlists/${mockPlaylist._id}`
-    );
+    const response: Response = await supertest(app)
+      .get(`/playlists/${mockPlaylist._id}`)
+      .set('Cookie', sessionCookie);
     expect(response.status).toBe(200);
     expect(response.body).toMatchObject({
       _id: expect.any(String),
       userId: expect.any(String),
       name: expect.any(String),
-      spotifyPlayListId: expect.any(String),
+      spotifyPlaylistId: expect.any(String),
       spotifyUserId: expect.any(String),
       imageUrl: expect.any(String),
     });
   });
   test("GET /playlists/:id returns a 404 if the playlist doesn't exist", async () => {
-    const response: Response = await supertest(app).get(
-      '/playlists/269ae06f-fb32-4935-85e1-3df76e42d92a'
-    );
+    const response: Response = await supertest(app)
+      .get('/playlists/269ae06f-fb32-4935-85e1-3df76e42d92a')
+      .set('Cookie', sessionCookie);
     expect(response.status).toBe(404);
     expect(response.body).toMatchObject({
       success: false,
@@ -96,9 +126,9 @@ describe('Playlist Router Tests', () => {
     });
   });
   test('GET /playlists/:id returns a 400 if the playlist ID is not a valid UUID', async () => {
-    const response: Response = await supertest(app).get(
-      '/playlists/not-a-valid-uuid'
-    );
+    const response: Response = await supertest(app)
+      .get('/playlists/not-a-valid-uuid')
+      .set('Cookie', sessionCookie);
     expect(response.status).toBe(400);
     expect(response.body).toMatchObject({
       success: false,
