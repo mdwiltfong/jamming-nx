@@ -97,6 +97,7 @@ app.get('/status', (req: Request, res: Response) => {
 app.use('/auth', authRouter);
 app.use('/users', validateURL, userRouter);
 app.use('/playlists', [validateURL, AuthMiddleWare], playlistRouter);
+app.use('/search', [AuthMiddleWare]);
 app.use(ErrorHandler);
 
 export default app;

@@ -7,3 +7,10 @@ export interface axiosOptions {
   };
   data?: any;
 }
+
+export enum SearchItemType {
+  ALBUM = 'album',
+  ARTIST = 'artist',
+  PLAYLIST = 'playlist',
+  TRACK = 'track',
+}

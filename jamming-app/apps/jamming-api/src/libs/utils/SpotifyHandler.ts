@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { axiosOptions } from '../../types/types';
+import { SearchItemType, axiosOptions } from '../../types/types';
 import config from './config';
 
 interface AccessTokenResponse {
@@ -49,6 +49,18 @@ export default class SpotifyHandler {
         `/v1/users/${this.spotifyUserId}/playlists`
       );
       return response.items;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  public static async search(q: string, type: SearchItemType): Promise<any> {
+    try {
+      const response = await this.spotifyAPIRequest(
+        'GET',
+        `/v1/search?q=${q}&type=${type}`
+      );
+      return response;
     } catch (error) {
       console.error(error);
     }
