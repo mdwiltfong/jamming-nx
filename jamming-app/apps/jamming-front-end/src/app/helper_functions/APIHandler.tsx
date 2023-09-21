@@ -45,9 +45,9 @@ interface UserDataHTTPResponse {
 }
 
 export default class APIHandler<T extends User, PlayList> {
-  private static token: string = '';
+  private static token = '';
   private static apiURL: URL = new URL(import.meta.env.VITE_API_URL as string);
-  constructor() {}
+
   private static async httpRequest<HTTPResponse>(
     httpMethod: 'GET' | 'PUT' | 'DELETE' | 'POST',
     endpoint: string,
@@ -63,7 +63,10 @@ export default class APIHandler<T extends User, PlayList> {
         },
         withCredentials: true,
       };
-      data ? (axiosOptions['data'] = data) : null;
+      if (data) {
+        axiosOptions['data'] = data;
+      }
+
       const response = (await axios(axiosOptions)) as HTTPResponse;
       return response;
     } catch (error) {
@@ -103,6 +106,19 @@ export default class APIHandler<T extends User, PlayList> {
         this.apiURL.href + 'auth/logout'
       );
       return response.statusText;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+  public static async search(q: string, type: string): Promise<any> {
+    try {
+      const response = await this.httpRequest<HTTPResponse>(
+        'GET',
+        this.apiURL.href + 'search',
+        { q, type }
+      );
+      return response.data;
     } catch (error) {
       console.error(error);
       throw error;

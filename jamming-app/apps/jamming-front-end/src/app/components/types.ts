@@ -1,12 +1,13 @@
 export interface SearchFormValues {
-  search: string;
+  q: string;
+  type: string;
 }
 
 export interface axiosOptions {
-  method: "GET" | "PUT" | "DELETE" | "POST";
+  method: 'GET' | 'PUT' | 'DELETE' | 'POST';
   url: string;
   headers: {
-    "Content-Type": string;
+    'Content-Type': string;
   };
   data?: any;
 }
