@@ -35,7 +35,9 @@ playlistRouter.get(
     try {
       const playlists = await SpotifyHandler.getPlaylists();
       return res.status(200).json(playlists);
-    } catch (error) {}
+    } catch (error) {
+      return next(error);
+    }
   }
 );
 

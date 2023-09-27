@@ -18,6 +18,7 @@ spotifyRouter.get(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const searchRequest = req.body.data as SearchRequest;
+      console.log(req);
       const response = await SpotifyHandler.search(
         searchRequest.q,
         searchRequest.type
@@ -28,3 +29,5 @@ spotifyRouter.get(
     }
   }
 );
+
+export default spotifyRouter;

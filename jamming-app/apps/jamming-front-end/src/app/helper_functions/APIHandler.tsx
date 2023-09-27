@@ -66,7 +66,8 @@ export default class APIHandler<T extends User, PlayList> {
       if (data) {
         axiosOptions['data'] = data;
       }
-
+      console.log(data);
+      console.log(axiosOptions);
       const response = (await axios(axiosOptions)) as HTTPResponse;
       return response;
     } catch (error) {

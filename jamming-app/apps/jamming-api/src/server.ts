@@ -15,6 +15,7 @@ import cors from 'cors';
 import SpotifyHandler from './libs/utils/SpotifyHandler';
 import AuthMiddleWare from './middleware/AuthMiddleWare';
 import MockStrategy from './mocks/mockStrategy';
+import spotifyRouter from './routes/spotifyRouter';
 passport.serializeUser(function (user, done) {
   done(null, user);
 });
@@ -97,7 +98,7 @@ app.get('/status', (req: Request, res: Response) => {
 app.use('/auth', authRouter);
 app.use('/users', validateURL, userRouter);
 app.use('/playlists', [validateURL, AuthMiddleWare], playlistRouter);
-app.use('/search', [AuthMiddleWare]);
+app.use('/search', AuthMiddleWare, spotifyRouter);
 app.use(ErrorHandler);
 
 export default app;

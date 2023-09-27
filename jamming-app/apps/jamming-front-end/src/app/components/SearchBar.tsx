@@ -29,6 +29,14 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   borderRadius: '10px',
 }));
 
+const validateOnChange = (values: SearchFormValues) => {
+  const errors: Partial<SearchFormValues> = {};
+
+  if (!values.q) {
+    errors.q = 'Required';
+  }
+  return errors;
+};
 function SearchBar() {
   const formik = useFormik({
     initialValues: {
@@ -36,15 +44,16 @@ function SearchBar() {
       type: 'album',
     },
     onSubmit: async (values: SearchFormValues) => {
-      console.log(values);
-      await APIHandler.search(values.q, values.type);
+      const response = await APIHandler.search(values.q, values.type);
+      console.log(response);
     },
+    validate: validateOnChange,
   });
   return (
     <Search onSubmit={formik.handleSubmit}>
       <StyledInputBase
         id="query"
-        name="search"
+        name="q"
         onChange={formik.handleChange}
         value={formik.values.q}
       />
