@@ -38,5 +38,5 @@ jobs:
         run: npm install --save-dev
         working-directory: ./jamming-app
       - name: Run tests
-        run: nx test jamming-api
         working-directory: ./jamming-app
+        run: nx test jamming-api
