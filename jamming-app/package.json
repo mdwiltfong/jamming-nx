@@ -35,7 +35,7 @@
     "passport": "^0.6.0",
     "passport-spotify": "^2.0.0",
     "passport-strategy": "^1.0.0",
-    "react": "18.2.0",
+    "react": "^17.0.2",
     "react-dom": "18.2.0",
     "react-router-dom": "^6.15.0",
     "styled-components": "^5.3.11",
