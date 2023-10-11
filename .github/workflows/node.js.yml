@@ -11,32 +11,26 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./jamming-app
-
-    strategy:
-      matrix:
-        node-version: [16.14.0]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 16.14.0
       - name: Cache Dependencies
         uses: actions/cache@v3
         with:
           path: .npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
-        run: npm install --save-dev
+        id: package-install
+        run: npm install
         working-directory: ./jamming-app
+      - name: Install nx
+        run: npm install -g nx
       - name: Run tests
         working-directory: ./jamming-app
         run: nx test jamming-api
