@@ -3,7 +3,7 @@ import { IUser } from '../db/helpers/models/User';
 import { NextFunction, Request, Response } from 'express';
 import SchemaErrorHandler from './SchemaErrorHandler';
 
-export const userPayloadSchema: yup.ObjectSchema<IUser<String>> = yup.object({
+export const userPayloadSchema: yup.ObjectSchema<IUser<string>> = yup.object({
   _id: yup.string(),
   firstName: yup.string().required(),
   spotifyID: yup.string().required(),
@@ -31,7 +31,7 @@ export async function validateURL(
     const url = req.url;
 
     if (urlSchema.isValidSync(url)) {
-      console.log(url + ' is a valid URL');
+      //console.log(url + ' is a valid URL');
       next();
       return true;
     } else {

@@ -5,8 +5,6 @@ const envFile = dotenv.config({
   path: path.resolve(process.cwd(), '.env'),
 });
 
-console.log(envFile);
-
 interface ENV {
   NODE_ENV: string | undefined;
   PORT: number | undefined;

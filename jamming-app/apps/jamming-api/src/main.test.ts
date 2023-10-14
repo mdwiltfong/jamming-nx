@@ -5,7 +5,7 @@ import MongoDBHelper from './db/helpers/db.helper';
 
 import { validationSchemas } from './db/helpers/collectionSchemas';
 
-beforeAll(async () => {
+beforeEach(async () => {
   await MongoDBHelper.loadCollection(
     'users',
     validationSchemas.userValidationSchema,
@@ -37,7 +37,6 @@ describe('User Router Tests', () => {
   });
   test("GET /users/:id returns a user's information", async () => {
     const mockUser = mockData.mockUsers[0];
-    console.log(mockUser);
     const response: Response = await supertest(app)
       .get(`/users/${mockData.mockUsers[0]._id}`)
       .set('Cookie', sessionCookie);

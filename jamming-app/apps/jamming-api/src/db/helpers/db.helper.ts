@@ -33,11 +33,11 @@ export class MongoDBHelper {
       db;
       // Send a ping to confirm a successful connection
       await this.client.db('admin').command({ ping: 1 });
-      console.log(
+      /*   console.log(
         color.green(
           'Pinged your deployment. You successfully connected to MongoDB!'
-        )
-      );
+        ) 
+      );*/
       return db;
     } catch (error: any) {
       console.log(
@@ -60,7 +60,6 @@ export class MongoDBHelper {
       const dbClient = this.client.db(this.cluster);
       const collection = dbClient.collection(collectionName);
       const result = await collection.deleteMany({});
-      console.log(result);
     } catch (error) {
       console.log(error);
     } finally {
@@ -84,19 +83,20 @@ export class MongoDBHelper {
       //It if doesn't exist, we don't drop it, and go straight to creating it
       if (usrCollection.length > 0) {
         const deleteResult = await dbClient.dropCollection(collectionName);
-        console.log('Dropped Collection =>', deleteResult);
+        //console.log('Dropped Collection =>', deleteResult);
       }
       // Creating collection
       const newUsrCollection = await dbClient.createCollection(
         collectionName,
         collectionSchema
       );
-      console.log('Created Collection =>', newUsrCollection.namespace);
+      //console.log('Created Collection =>', newUsrCollection.namespace);
       const insertionResult = await newUsrCollection.insertMany(mockData);
-      console.log(
+      /*console.log(
         'Inserted mock data into collection =>',
         insertionResult.insertedCount
       );
+      */
       insertionResult.insertedIds;
     } catch (error) {
       console.log(
@@ -274,7 +274,7 @@ export class Model<T extends User | Playlist> {
           true
         );
       }
-      console.log(document);
+
       return document.value as User;
     } catch (error) {
       console.log(error);

@@ -5,10 +5,10 @@ import { mockData } from '../mockData';
 import { Playlist, User } from '../models/User';
 describe(color.cyan('MongoDBHelper connectivity tests'), () => {
   test('Function can connect to DB instance', async () => {
-    const db = await MongoDBHelper.connect();
+    await MongoDBHelper.connect();
   });
   test('Function is able to disconnect from DB', async () => {
-    const db = await MongoDBHelper.disconnect();
+    await MongoDBHelper.disconnect();
   });
 });
 

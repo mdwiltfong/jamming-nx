@@ -31,6 +31,6 @@ jobs:
         working-directory: ./jamming-app
       - name: Install nx
         run: npm install -g nx
-      - name: Run tests
+      - name: Run Api Tests
         working-directory: ./jamming-app
         run: nx test jamming-api
