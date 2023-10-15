@@ -12,6 +12,19 @@ on:
 
 jobs:
   test:
+    env:
+      PORT: ${{ secrets.PORT }}
+      EXPRESS_URL_PROD: ${{ secrets.EXPRESS_URL_PROD }}
+      EXPRESS_URL_DEV: ${{ secrets.EXPRESS_URL_DEV }}
+      SPOTIFY_ACCOUNTS_URL: ${{ secrets.SPOTIFY_ACCOUNTS_URL }}
+      SPOTIFY_API_URL: ${{ secrets.SPOTIFY_API_URL }}
+      CLIENT_ID: ${{ secrets.CLIENT_ID }}
+      MONGODB_URI: ${{ secrets.MONGO_URI }}
+      CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+      REDIRECT_URI: ${{ secrets.REDIRECT_URI }}
+      VITE_API_URL: ${{ secrets.VITE_API_URL }}
+      SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
+
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
