@@ -17,6 +17,7 @@ export class MongoDBHelper {
   private static cluster = 'cluster0';
   private static client: MongoClient = this.generateMongoClient();
   private static generateMongoClient(): MongoClient {
+    console.log(config.MONGODB_URI);
     const db = new MongoClient(this.connectionString, {
       serverApi: {
         version: ServerApiVersion.v1,
