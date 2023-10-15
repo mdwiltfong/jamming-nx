@@ -12,7 +12,7 @@ const ErrorHandler = (
     console.log(colors.red.underline('Middleware Error Handling'));
     const errStatus = err.httpCode;
     const errMsg = err.message;
-    console.error(colors.red(err.stack));
+    //console.error(colors.red(err.stack));
     res.status(errStatus).json({
       success: false,
       status: errStatus,

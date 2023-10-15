@@ -261,7 +261,7 @@ export class Model<T extends User | Playlist> {
   public async deleteDocument(
     query: Filter<T>,
     collectName: CollectionInfo
-  ): Promise<User> {
+  ): Promise<T> {
     try {
       await this.dbClient.connect();
       const collection = await this.findCollection(collectName);
@@ -275,7 +275,7 @@ export class Model<T extends User | Playlist> {
         );
       }
 
-      return document.value as User;
+      return document.value as T;
     } catch (error) {
       console.log(error);
     } finally {

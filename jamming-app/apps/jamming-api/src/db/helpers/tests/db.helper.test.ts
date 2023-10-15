@@ -3,6 +3,28 @@ import color from 'colors';
 import { validationSchemas } from '../collectionSchemas';
 import { mockData } from '../mockData';
 import { Playlist, User } from '../models/User';
+
+beforeAll(async () => {
+  await MongoDBHelper.loadCollection(
+    'users',
+    validationSchemas.userValidationSchema,
+    mockData.mockUsers
+  );
+  await MongoDBHelper.loadCollection(
+    'playlists',
+    validationSchemas.playlistValidationSchema,
+    mockData.mockPlaylists
+  );
+  await MongoDBHelper.clearCollection('sessions');
+});
+
+afterAll(async () => {
+  await MongoDBHelper.clearCollection('users');
+  await MongoDBHelper.clearCollection('playlists');
+  await MongoDBHelper.clearCollection('sessions');
+  await MongoDBHelper.disconnect();
+});
+
 describe(color.cyan('MongoDBHelper connectivity tests'), () => {
   test('Function can connect to DB instance', async () => {
     await MongoDBHelper.connect();
@@ -12,7 +34,7 @@ describe(color.cyan('MongoDBHelper connectivity tests'), () => {
   });
 });
 
-describe(color.cyan('MongoDBHelper can  load collection'), () => {
+/* describe(color.cyan('MongoDBHelper can  load collection'), () => {
   test('Helper Function can load User collection', async () => {
     await MongoDBHelper.loadCollection(
       'users',
@@ -27,19 +49,8 @@ describe(color.cyan('MongoDBHelper can  load collection'), () => {
       mockData.mockPlaylists
     );
   });
-});
-beforeAll(async () => {
-  await MongoDBHelper.loadCollection(
-    'users',
-    validationSchemas.userValidationSchema,
-    mockData.mockUsers
-  );
-  await MongoDBHelper.loadCollection(
-    'playlists',
-    validationSchemas.playlistValidationSchema,
-    mockData.mockPlaylists
-  );
-});
+}); */
+
 describe(color.cyan('Model generic tests'), () => {
   test('Can find user document', async () => {
     const userModel = new Model<User>('user');
@@ -72,7 +83,7 @@ describe(color.cyan('Model generic tests'), () => {
       _id: expect.any(String),
       userId: expect.any(String),
       name: expect.any(String),
-      spotifyPlayListId: expect.any(String),
+      spotifyPlaylistId: expect.any(String),
       spotifyUserId: expect.any(String),
       imageUrl: expect.any(String),
     });
@@ -101,17 +112,18 @@ describe(color.cyan('Model generic tests'), () => {
     expect(deletedUser).toBeNull();
   });
   test('Can delete playlist document', async () => {
-    const playlistmodel = new Model<Playlist>('user');
+    const playlistmodel = new Model<Playlist>('playlist');
 
     const deletedPlayList = await playlistmodel.deleteDocument(
       { name: 'Playlist 1' },
       { name: 'playlists' }
     );
+    console.log(deletedPlayList);
     expect(deletedPlayList).toMatchObject({
       _id: expect.any(String),
       userId: expect.any(String),
       name: expect.any(String),
-      spotifyPlayListId: expect.any(String),
+      spotifyPlaylistId: expect.any(String),
       spotifyUserId: expect.any(String),
       imageUrl: expect.any(String),
     });

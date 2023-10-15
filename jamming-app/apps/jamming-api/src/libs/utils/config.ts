@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import path from 'path';
 
-const envFile = dotenv.config({
+dotenv.config({
   path: path.resolve(process.cwd(), '.env'),
 });
 

@@ -4,8 +4,8 @@ import { mockData } from './db/helpers/mockData';
 import MongoDBHelper from './db/helpers/db.helper';
 
 import { validationSchemas } from './db/helpers/collectionSchemas';
-
-beforeEach(async () => {
+let sessionCookie = '';
+beforeAll(async () => {
   await MongoDBHelper.loadCollection(
     'users',
     validationSchemas.userValidationSchema,
@@ -17,6 +17,15 @@ beforeEach(async () => {
     mockData.mockPlaylists
   );
   await MongoDBHelper.clearCollection('sessions');
+  const response: Response = await supertest(app).get('/auth/login');
+  sessionCookie = response.headers['set-cookie'];
+});
+
+afterAll(async () => {
+  await MongoDBHelper.clearCollection('users');
+  await MongoDBHelper.clearCollection('playlists');
+  await MongoDBHelper.clearCollection('sessions');
+  await MongoDBHelper.disconnect();
 });
 describe('Server Tests', () => {
   test('Server is running', async () => {
@@ -29,14 +38,7 @@ describe('Server Tests', () => {
 });
 
 describe('User Router Tests', () => {
-  let sessionCookie = '';
-  beforeEach(async () => {
-    await MongoDBHelper.clearCollection('sessions');
-    const response: Response = await supertest(app).get('/auth/login');
-    sessionCookie = response.headers['set-cookie'];
-  });
   test("GET /users/:id returns a user's information", async () => {
-    const mockUser = mockData.mockUsers[0];
     const response: Response = await supertest(app)
       .get(`/users/${mockData.mockUsers[0]._id}`)
       .set('Cookie', sessionCookie);
@@ -75,8 +77,7 @@ describe('User Router Tests', () => {
 
 describe('Playlist Router Tests', () => {
   let sessionCookie = '';
-  beforeEach(async () => {
-    await MongoDBHelper.clearCollection('sessions');
+  beforeAll(async () => {
     const response: Response = await supertest(app).get('/auth/login');
     sessionCookie = response.headers['set-cookie'];
   });

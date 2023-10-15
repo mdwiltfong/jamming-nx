@@ -95,7 +95,7 @@ app.get('/status', (req: Request, res: Response) => {
   res.status(200).json({ message: 'Hello World' });
 });
 app.use('/auth', authRouter);
-app.use('/users', validateURL, userRouter);
+app.use('/users', [validateURL, AuthMiddleWare], userRouter);
 app.use('/playlists', [validateURL, AuthMiddleWare], playlistRouter);
 app.use(ErrorHandler);
 
