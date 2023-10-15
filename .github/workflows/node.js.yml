@@ -14,12 +14,11 @@ jobs:
   test:
     env:
       PORT: ${{ secrets.PORT }}
-      EXPRESS_URL_PROD: ${{ secrets.EXPRESS_URL_PROD }}
       EXPRESS_URL_DEV: ${{ secrets.EXPRESS_URL_DEV }}
       SPOTIFY_ACCOUNTS_URL: ${{ secrets.SPOTIFY_ACCOUNTS_URL }}
       SPOTIFY_API_URL: ${{ secrets.SPOTIFY_API_URL }}
       CLIENT_ID: ${{ secrets.CLIENT_ID }}
-      MONGODB_URI: ${{ secrets.MONGO_URI }}
+      MONGODB_URI: ${{ secrets.MONGODB_URI }}
       CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
       REDIRECT_URI: ${{ secrets.REDIRECT_URI }}
       VITE_API_URL: ${{ secrets.VITE_API_URL }}
@@ -48,6 +47,6 @@ jobs:
         working-directory: ./jamming-app
         run: |
           echo "THE PORT IS ${{ env.PORT}}"
-          echo "The Express URL is ${{ env.EXPRESS_URL_PROD}}"
+          echo "The Express URL Dev is ${{ env.EXPRESS_URL_DEV}}"
           echo "The MONGODB URI IS ${{ env.MONGODB_URI}}"
           nx test jamming-api
