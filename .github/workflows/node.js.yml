@@ -12,18 +12,6 @@ on:
 
 jobs:
   test:
-    env:
-      PORT: ${{ secrets.PORT }}
-      EXPRESS_URL_DEV: ${{ secrets.EXPRESS_URL_DEV }}
-      SPOTIFY_ACCOUNTS_URL: ${{ secrets.SPOTIFY_ACCOUNTS_URL }}
-      SPOTIFY_API_URL: ${{ secrets.SPOTIFY_API_URL }}
-      CLIENT_ID: ${{ secrets.CLIENT_ID }}
-      MONGODB_URI: ${{ secrets.MONGODB_URI }}
-      CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
-      REDIRECT_URI: ${{ secrets.REDIRECT_URI }}
-      VITE_API_URL: ${{ secrets.VITE_API_URL }}
-      SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
-
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -44,5 +32,16 @@ jobs:
       - name: Install nx
         run: npm install -g nx
       - name: Run Api Tests
+        env:
+          PORT: ${{ secrets.PORT }}
+          EXPRESS_URL_DEV: ${{ secrets.EXPRESS_URL_DEV }}
+          SPOTIFY_ACCOUNTS_URL: ${{ secrets.SPOTIFY_ACCOUNTS_URL }}
+          SPOTIFY_API_URL: ${{ secrets.SPOTIFY_API_URL }}
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+          REDIRECT_URI: ${{ secrets.REDIRECT_URI }}
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
+          SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
         working-directory: ./jamming-app
         run: nx test jamming-api
