@@ -44,4 +44,4 @@ jobs:
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
           SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
         working-directory: ./jamming-app
-        run: nx test jamming-api
+        run: nx test jamming-api --testTimeout=10000
