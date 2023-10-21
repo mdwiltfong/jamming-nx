@@ -20,6 +20,14 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16.14.0
+      - name: Start MongoDB
+        uses: supercharge/mongodb-github-action@v1.10.0
+        with:
+          mongodb-version: "4.4.10"
+          mongodb-port: ${{ secrets.MONGODB_PORT }}
+          mongodb-username: "jamming"
+          mongodb-password: ${{ secrets.MONGODB_PASSWORD }}
+          mongodb-replica-set: "test-rs"
       - name: Cache Dependencies
         uses: actions/cache@v3
         with:

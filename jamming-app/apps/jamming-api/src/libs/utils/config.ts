@@ -17,6 +17,7 @@ interface ENV {
   CLIENT_SECRET: string;
   VITE_API_URL: string;
   SESSION_SECRET: string;
+  MONGODB_URI_TEST: string;
 }
 
 interface Config extends ENV {}
@@ -34,6 +35,7 @@ const getConfig = (): ENV => {
     CLIENT_SECRET: process.env.CLIENT_SECRET,
     SESSION_SECRET: process.env.SESSION_SECRET,
     VITE_API_URL: process.env.VITE_API_URL,
+    MONGODB_URI_TEST: process.env.MONGODB_URI_TEST,
   };
 };
 

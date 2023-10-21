@@ -13,7 +13,8 @@ import MongoDBErrorHandler from '../errorHandlers/MongoDBErrorHandler';
 import BaseError from '../errorHandlers/BaseError';
 import OAuth from 'oauth2-server';
 export class MongoDBHelper {
-  private static connectionString: string = config.MONGODB_URI;
+  private static connectionString: string =
+    config.NODE_ENV == 'test' ? config.MONGODB_URI_TEST : config.MONGODB_URI;
   private static cluster = 'cluster0';
   private static client: MongoClient = this.generateMongoClient();
   private static generateMongoClient(): MongoClient {
