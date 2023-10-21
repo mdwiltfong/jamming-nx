@@ -51,5 +51,6 @@ jobs:
           REDIRECT_URI: ${{ secrets.REDIRECT_URI }}
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
           SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
+          MONGODB_URI_TEST: ${{ secrets.MONGODB_URI_TEST }}
         working-directory: ./jamming-app
         run: nx test jamming-api --testTimeout=10000
