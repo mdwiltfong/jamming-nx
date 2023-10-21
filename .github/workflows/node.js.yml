@@ -27,7 +27,6 @@ jobs:
           mongodb-port: ${{ secrets.MONGODB_PORT }}
           mongodb-username: "jamming"
           mongodb-password: ${{ secrets.MONGODB_PASSWORD }}
-          mongodb-replica-set: "test-rs"
       - name: Cache Dependencies
         uses: actions/cache@v3
         with:
