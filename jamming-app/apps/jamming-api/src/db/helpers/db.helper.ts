@@ -19,13 +19,7 @@ export class MongoDBHelper {
   private static client: MongoClient = this.generateMongoClient();
   private static generateMongoClient(): MongoClient {
     console.log('Connecting to MongoDB');
-    const db = new MongoClient(this.connectionString, {
-      serverApi: {
-        version: ServerApiVersion.v1,
-        strict: true,
-        deprecationErrors: true,
-      },
-    });
+    const db = new MongoClient(this.connectionString);
 
     return db;
   }
