@@ -33,11 +33,11 @@ export class MongoDBHelper {
       db;
       // Send a ping to confirm a successful connection
       await this.client.db('admin').command({ ping: 1 });
-      /*   console.log(
+      console.log(
         color.green(
           'Pinged your deployment. You successfully connected to MongoDB!'
-        ) 
-      );*/
+        )
+      );
       return db;
     } catch (error: any) {
       console.log(
