@@ -14,12 +14,22 @@ import BaseError from '../errorHandlers/BaseError';
 import OAuth from 'oauth2-server';
 export class MongoDBHelper {
   private static connectionString: string =
-    config.NODE_ENV == 'test' ? config.MONGODB_URI_TEST : config.MONGODB_URI;
+    config.NODE_ENV == 'test'
+      ? config.MONGODB_URI_TEST == null
+        ? config.MONGODB_URI
+        : config.MONGODB_URI_TEST
+      : config.MONGODB_URI;
   private static cluster = 'cluster0';
   private static client: MongoClient = this.generateMongoClient();
   private static generateMongoClient(): MongoClient {
     console.log('Connecting to MongoDB');
-    const db = new MongoClient(this.connectionString);
+    const db = new MongoClient(this.connectionString, {
+      serverApi: {
+        version: ServerApiVersion.v1,
+        strict: true,
+        deprecationErrors: true,
+      },
+    });
 
     return db;
   }
